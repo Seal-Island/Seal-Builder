@@ -1,0 +1,87 @@
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        jcenter()
+        mavenCentral()
+        maven {
+            url = 'http://repo.spongepowered.org/maven'
+        }
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+    }
+}
+
+plugins {
+    id "com.github.johnrengelman.shadow" version "4.0.4"
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+
+group = 'com.focamacho'
+version = '1.0'
+archivesBaseName = 'Seal Builder'
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+minecraft {
+    mappings channel: 'stable', version: '39-1.12'
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                sealinit {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                sealinit {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'sponge'
+        url = 'https://repo.spongepowered.org/maven'
+    }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+    compileOnly 'org.spongepowered:spongeapi:7.2.0'
+    compileOnly group: 'org.json', name: 'json', version: '20200518'
+    compileOnly group: 'commons-io', name: 'commons-io', version: '2.7'
+
+    compile files("../Seal Library/build/libs/Seal Library-1.1.jar")
+    compile files("libs/Pixelmon-1.12.2-8.1.2-universal.jar")
+
+    compile ('org.spongepowered:spongecommon:7.0.0-SNAPSHOT:dev') {
+        exclude group: 'org.spongepowered', module: 'testplugins'
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+tasks.withType(JavaCompile) {
+    options.encoding("UTF-8")
+}
