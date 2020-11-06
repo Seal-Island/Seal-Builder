@@ -173,6 +173,8 @@ public class LangConfig {
         defaultMessages.put("chat.ivs.minus", "&7O &bIV &7do seu &dPokémon &7foi diminuido.");
         defaultMessages.put("chat.ivs.blacklist", "&7Desculpe, não é permitido a alteração dos &bIVs &7deste tipo de &dPokémon&7.");
         defaultMessages.put("chat.ivs.random", "&7Os &bIVs &7do seu &dPokémon &7foram randomizados.");
+        defaultMessages.put("chat.onlyplayer", "&7Somente jogadores podem usar esse comando.");
+        defaultMessages.put("chat.nopermission", "&7Você não tem permissão para fazer isso.");
 
         //Básico
         defaultMessages.put("yes", "Sim");

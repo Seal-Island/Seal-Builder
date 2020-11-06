@@ -1,19 +1,17 @@
 package com.focamacho.sealbuilder;
 
+import com.focamacho.sealbuilder.command.BuilderCommand;
 import com.focamacho.sealbuilder.config.ConfigManager;
 import com.focamacho.sealbuilder.config.LangConfig;
 import com.focamacho.sealbuilder.config.OverridesConfig;
-import com.focamacho.sealbuilder.inventory.PokemonSelectInventory;
 import com.focamacho.sealbuilder.listener.CreatePokemonListener;
 import com.google.inject.Inject;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
@@ -51,10 +49,7 @@ public class SealBuilder {
         loadLang();
         loadOverrides();
 
-        Sponge.getCommandManager().register(this, CommandSpec.builder().executor((src, args) -> {
-            ((Player)src).openInventory(PokemonSelectInventory.get((Player)src));
-            return CommandResult.success();
-        }).build(), "builder");
+        Sponge.getCommandManager().register(this, CommandSpec.builder().executor(new BuilderCommand()).build(), "builder");
 
         Sponge.getEventManager().registerListeners(this, new CreatePokemonListener());
     }
