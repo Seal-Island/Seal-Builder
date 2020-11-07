@@ -158,6 +158,7 @@ public class PokemonIVsInventory {
             } else {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.minus"), pokemon));
             }
+            MoneyUtils.removeMoney(player, BigDecimal.valueOf(finalPrice), currency);
         } else {
             player.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));
         }
