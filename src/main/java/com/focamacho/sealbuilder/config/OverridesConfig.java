@@ -290,10 +290,17 @@ public class OverridesConfig {
             JsonHandler.saveToJson(overridesFile, json);
             blacklistObject = new JSONObject();
         }
-        blacklistObject.toMap().forEach((key, strings) -> {
+        blacklistObject.keySet().forEach(key -> {
             EnumSpecies pokemon = EnumSpecies.getFromNameAnyCase(key);
-            if (pokemon != null && strings instanceof String[]) {
-                blacklist.put(pokemon, (String[])strings);
+            if (pokemon != null) {
+                JSONArray blacklistedModifiersArray = blacklistObject.getJSONArray(key);
+                String[] blacklistedModifiers = new String[blacklistedModifiersArray.length()];
+
+                for(int i = 0; i < blacklistedModifiersArray.length(); i++) {
+                    blacklistedModifiers[i] = blacklistedModifiersArray.getString(i);
+                }
+
+                blacklist.put(pokemon, blacklistedModifiers);
             }
         });
 
