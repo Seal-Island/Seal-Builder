@@ -34,13 +34,13 @@ public class PokemonCreateInventory {
 
     private static final MenuBuilder base = getBase();
 
-    public static Inventory get(EnumSpecies specie) {
+    public static Inventory get(EnumSpecies specie, Player player) {
         MenuBuilder menu = base.copy();
 
         Pokemon pokemon = Pixelmon.pokemonFactory.create(specie);
 
         Currency currency = getPokemonCurrency(specie);
-        double price = getPokemonPrice(specie);
+        double price = getPokemonPrice(specie, player);
 
         String pokemonItemName = getFormattedCurrency(LangConfig.get("menu.create.pokemon.name"), currency, price);
         String pokemonItemLore = getFormattedCurrency(LangConfig.get("menu.create.pokemon.lore"), currency, price);
@@ -86,9 +86,9 @@ public class PokemonCreateInventory {
         return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(PluginConfig.currencyId);
     }
 
-    private static double getPokemonPrice(EnumSpecies specie) {
+    private static double getPokemonPrice(EnumSpecies specie, Player player) {
         Double override = ConfigUtils.getPriceOverrides(specie, "create", "");
-        return override != null ? override : specie.isLegendary() ? PluginConfig.legendaryPokemonPrice : PluginConfig.normalPokemonPrice;
+        return ConfigUtils.applyDiscount(override != null ? override : specie.isLegendary() ? PluginConfig.legendaryPokemonPrice : PluginConfig.normalPokemonPrice, player);
     }
 
     private static MenuBuilder getBase() {

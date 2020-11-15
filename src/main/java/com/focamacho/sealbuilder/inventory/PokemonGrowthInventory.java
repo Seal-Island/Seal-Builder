@@ -33,14 +33,14 @@ public class PokemonGrowthInventory {
 
     private static final MenuBuilder base = getBase();
 
-    public static Inventory get(Pokemon pokemon) {
+    public static Inventory get(Pokemon pokemon, Player player) {
         MenuBuilder menu = base.copy();
 
         //Retornar ao Menu de Edição
         ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon)).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
-            Player player = (Player) click.getSource();
-            InventoryUtils.openInventory(player, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+            Player player2 = (Player) click.getSource();
+            InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon), SealBuilder.instance);
         }).build(4, pokemonItem));
 
         //Container Base para Poção
@@ -49,7 +49,7 @@ public class PokemonGrowthInventory {
         //Valores iniciais
         EnumGrowth growth = EnumGrowth.Microscopic;
         Currency currency = getGrowthCurrency(pokemon.getSpecies(), growth);
-        double price = getGrowthPrice(pokemon.getSpecies(), growth);
+        double price = getGrowthPrice(pokemon.getSpecies(), growth, player);
         
         //Microscópico
         ItemStack microscopic = ItemStack.builder().fromContainer(potionContainer).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("growth.microscopic"), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(pokemon.getGrowth() == growth ? LangConfig.get("menu.growth.your") : LangConfig.get("menu.growth.lore"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
@@ -58,56 +58,56 @@ public class PokemonGrowthInventory {
         //Pigmeu
         growth = EnumGrowth.Pygmy;
         currency = getGrowthCurrency(pokemon.getSpecies(), growth);
-        price = getGrowthPrice(pokemon.getSpecies(), growth);
+        price = getGrowthPrice(pokemon.getSpecies(), growth, player);
         ItemStack pygmy = ItemStack.builder().fromContainer(potionContainer.set(DataQuery.of("UnsafeData" , "Potion"), "minecraft:long_poison")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("growth.pygmy"), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(pokemon.getGrowth() == growth ? LangConfig.get("menu.growth.your") : LangConfig.get("menu.growth.lore"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         addGrowthToMenu(menu, growth, pokemon, currency, price, 13, pygmy);
 
         //Nanico
         growth = EnumGrowth.Runt;
         currency = getGrowthCurrency(pokemon.getSpecies(), growth);
-        price = getGrowthPrice(pokemon.getSpecies(), growth);
+        price = getGrowthPrice(pokemon.getSpecies(), growth, player);
         ItemStack runt = ItemStack.builder().fromContainer(potionContainer.set(DataQuery.of("UnsafeData" , "Potion"), "minecraft:leaping")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("growth.runt"), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(pokemon.getGrowth() == growth ? LangConfig.get("menu.growth.your") : LangConfig.get("menu.growth.lore"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         addGrowthToMenu(menu, growth, pokemon, currency, price, 14, runt);
 
         //Pequeno
         growth = EnumGrowth.Small;
         currency = getGrowthCurrency(pokemon.getSpecies(), growth);
-        price = getGrowthPrice(pokemon.getSpecies(), growth);
+        price = getGrowthPrice(pokemon.getSpecies(), growth, player);
         ItemStack small = ItemStack.builder().fromContainer(potionContainer.set(DataQuery.of("UnsafeData" , "Potion"), "minecraft:long_fire_resistance")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("growth.small"), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(pokemon.getGrowth() == growth ? LangConfig.get("menu.growth.your") : LangConfig.get("menu.growth.lore"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         addGrowthToMenu(menu, growth, pokemon, currency, price, 21, small);
 
         //Comum
         growth = EnumGrowth.Ordinary;
         currency = getGrowthCurrency(pokemon.getSpecies(), growth);
-        price = getGrowthPrice(pokemon.getSpecies(), growth);
+        price = getGrowthPrice(pokemon.getSpecies(), growth, player);
         ItemStack ordinary = ItemStack.builder().fromContainer(potionContainer.set(DataQuery.of("UnsafeData" , "Potion"), "minecraft:long_slowness")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("growth.ordinary"), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(pokemon.getGrowth() == growth ? LangConfig.get("menu.growth.your") : LangConfig.get("menu.growth.lore"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         addGrowthToMenu(menu, growth, pokemon, currency, price, 22, ordinary);
 
         //Imenso
         growth = EnumGrowth.Huge;
         currency = getGrowthCurrency(pokemon.getSpecies(), growth);
-        price = getGrowthPrice(pokemon.getSpecies(), growth);
+        price = getGrowthPrice(pokemon.getSpecies(), growth, player);
         ItemStack huge = ItemStack.builder().fromContainer(potionContainer.set(DataQuery.of("UnsafeData" , "Potion"), "minecraft:long_water_breathing")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("growth.huge"), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(pokemon.getGrowth() == growth ? LangConfig.get("menu.growth.your") : LangConfig.get("menu.growth.lore"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         addGrowthToMenu(menu, growth, pokemon, currency, price, 23, huge);
 
         //Gigante
         growth = EnumGrowth.Giant;
         currency = getGrowthCurrency(pokemon.getSpecies(), growth);
-        price = getGrowthPrice(pokemon.getSpecies(), growth);
+        price = getGrowthPrice(pokemon.getSpecies(), growth, player);
         ItemStack giant = ItemStack.builder().fromContainer(potionContainer.set(DataQuery.of("UnsafeData" , "Potion"), "minecraft:long_invisibility")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("growth.giant"), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(pokemon.getGrowth() == growth ? LangConfig.get("menu.growth.your") : LangConfig.get("menu.growth.lore"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         addGrowthToMenu(menu, growth, pokemon, currency, price, 30, giant);
 
         //Enorme
         growth = EnumGrowth.Enormous;
         currency = getGrowthCurrency(pokemon.getSpecies(), growth);
-        price = getGrowthPrice(pokemon.getSpecies(), growth);
+        price = getGrowthPrice(pokemon.getSpecies(), growth, player);
         ItemStack enormous = ItemStack.builder().fromContainer(potionContainer.set(DataQuery.of("UnsafeData" , "Potion"), "minecraft:strong_healing")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("growth.enormous"), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(pokemon.getGrowth() == growth ? LangConfig.get("menu.growth.your") : LangConfig.get("menu.growth.lore"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         addGrowthToMenu(menu, growth, pokemon, currency, price, 31, enormous);
 
         //Gigantesco
         growth = EnumGrowth.Ginormous;
         currency = getGrowthCurrency(pokemon.getSpecies(), growth);
-        price = getGrowthPrice(pokemon.getSpecies(), growth);
+        price = getGrowthPrice(pokemon.getSpecies(), growth, player);
         ItemStack ginormous = ItemStack.builder().fromContainer(potionContainer.set(DataQuery.of("UnsafeData" , "Potion"), "minecraft:night_vision")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("growth.ginormous"), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(pokemon.getGrowth() == growth ? LangConfig.get("menu.growth.your") : LangConfig.get("menu.growth.lore"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         addGrowthToMenu(menu, growth, pokemon, currency, price, 32, ginormous);
 
@@ -146,9 +146,9 @@ public class PokemonGrowthInventory {
         return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(PluginConfig.currencyId);
     }
 
-    private static double getGrowthPrice(EnumSpecies pokemon, EnumGrowth growth) {
+    private static double getGrowthPrice(EnumSpecies pokemon, EnumGrowth growth, Player player) {
         Double override = ConfigUtils.getPriceOverrides(pokemon, "growth", growth.toString());
-        return override != null ? override : PluginConfig.growthPrice;
+        return ConfigUtils.applyDiscount(override != null ? override : PluginConfig.growthPrice, player);
     }
 
     private static MenuBuilder getBase() {

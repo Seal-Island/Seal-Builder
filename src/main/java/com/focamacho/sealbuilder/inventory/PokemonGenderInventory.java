@@ -32,11 +32,11 @@ public class PokemonGenderInventory {
 
     private static final MenuBuilder base = getBase();
 
-    public static Inventory get(Pokemon pokemon) {
+    public static Inventory get(Pokemon pokemon, Player player) {
         MenuBuilder menu = base.copy();
 
         Currency currency = getGenderCurrency(pokemon);
-        double price = getGenderPrice(pokemon);
+        double price = getGenderPrice(pokemon, player);
 
         String pokemonItemName = getFormattedCurrency(LangConfig.get("menu.gender.pokemon.name"), currency, price);
         String pokemonItemLore = getFormattedCurrency(LangConfig.get("menu.gender.pokemon.lore"), currency, price);
@@ -83,9 +83,9 @@ public class PokemonGenderInventory {
         return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(PluginConfig.currencyId);
     }
 
-    private static double getGenderPrice(Pokemon pokemon) {
+    private static double getGenderPrice(Pokemon pokemon, Player player) {
         Double override = ConfigUtils.getPriceOverrides(pokemon.getSpecies(), "gender", "");
-        return override != null ? override : PluginConfig.genderPrice;
+        return ConfigUtils.applyDiscount(override != null ? override : PluginConfig.genderPrice, player);
     }
 
     private static MenuBuilder getBase() {

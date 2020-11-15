@@ -8,6 +8,8 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.Moveset;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.Stats;
 import com.pixelmonmod.pixelmon.enums.EnumNature;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
+import org.apache.commons.codec.language.bm.Lang;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
@@ -25,7 +27,7 @@ public class TextUtils {
     }
 
     public static Text getFormattedText(String text, Player player) {
-        return getFormattedText(text);
+        return getFormattedText(text.replace("%discountlore%", player.getOption("sealbuilder.discount").isPresent() ? LangConfig.get("discount.applied").replace("%discount%", player.getOption("sealbuilder.discount").get() + "%") : ("")));
     }
 
     public static Text getFormattedText(String text, Pokemon pokemon) {
@@ -79,9 +81,22 @@ public class TextUtils {
                 .replace("%pokemonmovethree%", moveset.get(2) == null ? LangConfig.get("none") : moveset.get(2).getActualMove().getLocalizedName())
                 .replace("%pokemonmovefour%", moveset.get(3) == null ? LangConfig.get("none") : moveset.get(3).getActualMove().getLocalizedName())
                 .replace("%pokemonivpercentage%", ivPercentageFormat.format((int) ((double) ivSum / 186.0 * 100.0)))
-                .replace("%pokemonevpercentage%", ivPercentageFormat.format((int) ((double) evSum / 510.0 * 100.0)));
+                .replace("%pokemonevpercentage%", ivPercentageFormat.format((int) ((double) evSum / 510.0 * 100.0))
+                .replace("%blacklistedmodifiers%", getBlacklistedModifiers(pokemon.getSpecies())));
 
         return pokemon.getOwnerPlayer() == null ? getFormattedText(pokemonPlaceholders) : getFormattedText(pokemonPlaceholders, (Player)pokemon.getOwnerPlayer());
+    }
+
+    private static String getBlacklistedModifiers(EnumSpecies specie) {
+        StringBuilder blacklist = new StringBuilder();
+        List<String> blacklisted = ConfigUtils.getBlacklistedModifiers(specie);
+        if(!blacklisted.isEmpty()) {
+            blacklist.append(LangConfig.get("menu.create.blacklistwarn"));
+            blacklisted.forEach(modifier -> {
+                blacklist.append("\n").append(modifier);
+            });
+        }
+        return blacklist.toString();
     }
 
     public static List<Text> getFormattedLore(String text, Pokemon pokemon) {

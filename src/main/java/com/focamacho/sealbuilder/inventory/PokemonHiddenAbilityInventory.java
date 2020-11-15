@@ -31,11 +31,11 @@ public class PokemonHiddenAbilityInventory {
 
     private static final MenuBuilder base = getBase();
 
-    public static Inventory get(Pokemon pokemon) {
+    public static Inventory get(Pokemon pokemon, Player player) {
         MenuBuilder menu = base.copy();
 
         Currency currency = getHiddenAbilityCurrency(pokemon);
-        double price = getHiddenAbilityPrice(pokemon);
+        double price = getHiddenAbilityPrice(pokemon, player);
 
         String pokemonItemName = getFormattedCurrency(LangConfig.get("menu.hiddenability.pokemon.name"), currency, price);
         String pokemonItemLore = getFormattedCurrency(LangConfig.get("menu.hiddenability.pokemon.lore"), currency, price);
@@ -82,9 +82,9 @@ public class PokemonHiddenAbilityInventory {
         return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(PluginConfig.currencyId);
     }
 
-    private static double getHiddenAbilityPrice(Pokemon pokemon) {
+    private static double getHiddenAbilityPrice(Pokemon pokemon, Player player) {
         Double override = ConfigUtils.getPriceOverrides(pokemon.getSpecies(), "hiddenability", "");
-        return override != null ? override : PluginConfig.hiddenAbilityPrice;
+        return ConfigUtils.applyDiscount(override != null ? override : PluginConfig.hiddenAbilityPrice, player);
     }
 
     private static MenuBuilder getBase() {

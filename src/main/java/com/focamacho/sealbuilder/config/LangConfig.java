@@ -48,46 +48,47 @@ public class LangConfig {
         defaultMessages.put("menu.create.cancel.name", "&cCancelar");
         defaultMessages.put("menu.create.cancel.lore", "&7Fechar o menu.");
         defaultMessages.put("menu.create.confirm.name", "&aConfirmar");
-        defaultMessages.put("menu.create.confirm.lore", "&7Isso vai lhe custar &c%price% %currencyname%&7.");
+        defaultMessages.put("menu.create.confirm.lore", "&7Isso vai lhe custar &c%price% %currencyname%&7.%discountlore%");
         defaultMessages.put("menu.create.pokemon.name", "&d%pokemonname%");
-        defaultMessages.put("menu.create.pokemon.lore", "&7Preço: &d&c%price% %currencyname%");
+        defaultMessages.put("menu.create.pokemon.lore", "&7Preço: &d&c%price% %currencyname%%blacklistwarn%%discountlore%");
+        defaultMessages.put("menu.create.blacklistwarn", "\n&7Atenção! Os seguintes modificadores estão\n&7bloqueados nesse &dPokémon&7:");
 
         //Menu de Shiny
         defaultMessages.put("menu.shiny.title", "Alternar shiny");
         defaultMessages.put("menu.shiny.cancel.name", "&cCancelar");
         defaultMessages.put("menu.shiny.cancel.lore", "&7Voltar ao menu de edição.");
         defaultMessages.put("menu.shiny.confirm.name", "&aConfirmar");
-        defaultMessages.put("menu.shiny.confirm.lore", "&7Isso vai lhe custar &c%price% %currencyname%&7.");
+        defaultMessages.put("menu.shiny.confirm.lore", "&7Isso vai lhe custar &c%price% %currencyname%&7.%discountlore%");
         defaultMessages.put("menu.shiny.pokemon.name", "&d%pokemonname%");
-        defaultMessages.put("menu.shiny.pokemon.lore", "&7Preço: &d&c%price% %currencyname%");
+        defaultMessages.put("menu.shiny.pokemon.lore", "&7Preço: &d&c%price% %currencyname%%discountlore%");
 
         //Menu de Mudança de Gênero
         defaultMessages.put("menu.gender.title", "Alternar gênero");
         defaultMessages.put("menu.gender.cancel.name", "&cCancelar");
         defaultMessages.put("menu.gender.cancel.lore", "&7Voltar ao menu de edição.");
         defaultMessages.put("menu.gender.confirm.name", "&aConfirmar");
-        defaultMessages.put("menu.gender.confirm.lore", "&7Isso vai lhe custar &c%price% %currencyname%&7.");
+        defaultMessages.put("menu.gender.confirm.lore", "&7Isso vai lhe custar &c%price% %currencyname%&7.%discountlore%");
         defaultMessages.put("menu.gender.pokemon.name", "&d%pokemonname%");
-        defaultMessages.put("menu.gender.pokemon.lore", "&7Novo Gênero: &d%pokemongender%\n&7Preço: &d&c%price% %currencyname%");
+        defaultMessages.put("menu.gender.pokemon.lore", "&7Novo Gênero: &d%pokemongender%\n&7Preço: &d&c%price% %currencyname%%discountlore%");
 
         //Menu de Desbloqueio de Habilidade Oculta
         defaultMessages.put("menu.hiddenability.title", "Desbloquear habilidade oculta");
         defaultMessages.put("menu.hiddenability.cancel.name", "&cCancelar");
         defaultMessages.put("menu.hiddenability.cancel.lore", "&7Voltar ao menu de edição.");
         defaultMessages.put("menu.hiddenability.confirm.name", "&aConfirmar");
-        defaultMessages.put("menu.hiddenability.confirm.lore", "&7Isso vai lhe custar &c%price% %currencyname%&7.");
+        defaultMessages.put("menu.hiddenability.confirm.lore", "&7Isso vai lhe custar &c%price% %currencyname%&7.%discountlore%");
         defaultMessages.put("menu.hiddenability.pokemon.name", "&d%pokemonname%");
-        defaultMessages.put("menu.hiddenability.pokemon.lore", "&7Nova Habilidade: &d%pokemonability%\n&7Preço: &d&c%price% %currencyname%");
+        defaultMessages.put("menu.hiddenability.pokemon.lore", "&7Nova Habilidade: &d%pokemonability%\n&7Preço: &d&c%price% %currencyname%%discountlore%");
 
         //Menu de Edição de Pokébola
         defaultMessages.put("menu.growth.title", "Escolha um novo tamanho");
-        defaultMessages.put("menu.growth.lore", "&7Clique para escolher este &aTamanho&7.\n&7Preço: &a%price% %currencyname%");
+        defaultMessages.put("menu.growth.lore", "&7Clique para escolher este &aTamanho&7.\n&7Preço: &a%price% %currencyname%%discountlore%");
         defaultMessages.put("menu.growth.your", "&7Este já é o &aTamanho &7atual.");
 
         //Menu de Edição de Nature
         defaultMessages.put("menu.nature.title", "Escolha uma nova natureza");
-        defaultMessages.put("menu.nature.lore", "&a+ %plusstats%\n&c- %minusstats%\n&7Clique para escolher esta &cNatureza&7.\n&7Preço: &a%price% %currencyname%");
-        defaultMessages.put("menu.nature.neutral", "&8+- Neutro\n&7Clique para escolher esta &cNatureza&7.\n&7Preço: &a%price% %currencyname%");
+        defaultMessages.put("menu.nature.lore", "&a+ %plusstats%\n&c- %minusstats%\n&7Clique para escolher esta &cNatureza&7.\n&7Preço: &a%price% %currencyname%%discountlore%");
+        defaultMessages.put("menu.nature.neutral", "&8+- Neutro\n&7Clique para escolher esta &cNatureza&7.\n&7Preço: &a%price% %currencyname%%discountlore%");
         defaultMessages.put("menu.nature.your", "&7Esta já é a &cNatureza &7atual.");
         defaultMessages.put("menu.nature.attack.plus", "&aAumento de Ataque");
         defaultMessages.put("menu.nature.defence.plus", "&aAumento de Defesa");
@@ -116,12 +117,12 @@ public class LangConfig {
         defaultMessages.put("menu.ivs.speed.minus", "&cDiminuir Velocidade");
         defaultMessages.put("menu.ivs.limit.plus", "&7Limite máximo atingido.");
         defaultMessages.put("menu.ivs.limit.minus", "&7Limite mínimo atingido.");
-        defaultMessages.put("menu.ivs.lore.plus", "&7Clique para aumentar este &bIV &7em &b1 &7por &a%price%&7.\n&7Shift + Clique para aumentar este &bIV &7em &b10 &7por &a%priceiv10% %currencyname%&7.");
-        defaultMessages.put("menu.ivs.lore.minus", "&7Clique para diminuir este &bIV &7em &b1 &7por &a%price%&7.\n&7Shift + Clique para diminuir este &bIV &7em &b10 &7por &a%priceiv10% %currencyname%&7.");
+        defaultMessages.put("menu.ivs.lore.plus", "&7Clique para aumentar este &bIV &7em &b1 &7por &a%price%&7.\n&7Shift + Clique para aumentar este &bIV &7em &b10 &7por &a%priceiv10% %currencyname%&7.%discountlore%");
+        defaultMessages.put("menu.ivs.lore.minus", "&7Clique para diminuir este &bIV &7em &b1 &7por &a%price%&7.\n&7Shift + Clique para diminuir este &bIV &7em &b10 &7por &a%priceiv10% %currencyname%&7.%discountlore%");
         defaultMessages.put("menu.ivs.max.name", "&bIVs &dmáximos");
-        defaultMessages.put("menu.ivs.max.lore", "&7Clique para deixar todos os &bIVs &7do\n&7seu &dPokémon &7no máximo por &a%ivmaxprice% %currencyname%&7.");
+        defaultMessages.put("menu.ivs.max.lore", "&7Clique para deixar todos os &bIVs &7do\n&7seu &dPokémon &7no máximo por &a%ivmaxprice% %currencyname%&7.%discountlore%");
         defaultMessages.put("menu.ivs.random.name", "&bIVs &caleatórios");
-        defaultMessages.put("menu.ivs.random.lore", "&7Clique para randomizar todos os &bIVs &7do\n&7seu &dPokémon &7por &a%price% %currencyname%&7.\n&7(3 tipos ficarão no nível máximo)");
+        defaultMessages.put("menu.ivs.random.lore", "&7Clique para randomizar todos os &bIVs &7do\n&7seu &dPokémon &7por &a%price% %currencyname%&7.\n&7(3 tipos ficarão no nível máximo)%discountlore%");
 
         //Menu de Edição de Pokémon
         defaultMessages.put("menu.edit.title", "Clique em algo para editar");
@@ -134,6 +135,7 @@ public class LangConfig {
         defaultMessages.put("menu.edit.hiddenability.name", "&5Habilidade Oculta");
         defaultMessages.put("menu.edit.hiddenability.lore", "&7Clique para liberar a &5Habilidade&7\n&5Oculta &7do seu &dPokémon&7.");
         defaultMessages.put("menu.edit.hiddenability.your", "&7Seu &dPokémon &7já possui a\n&7sua &5Habilidade Oculta&7.");
+        defaultMessages.put("menu.edit.hiddenability.none", "&7Esse &dPokémon &7não possui\n&7uma &5Habilidade Oculta&7.");
         defaultMessages.put("menu.edit.gender.name", "&dGênero");
         defaultMessages.put("menu.edit.gender.lore", "&7Clique para alternar o &dGênero\n&7do seu &dPokémon&7.");
         defaultMessages.put("menu.edit.gender.nogender", "&7Este &dPokémon &7só possui\n&7um único &dGênero&7.");
@@ -144,7 +146,7 @@ public class LangConfig {
 
         //Menu de Edição de Pokébola
         defaultMessages.put("menu.pokeball.title", "Escolha uma nova pokébola");
-        defaultMessages.put("menu.pokeball.lore", "&7Clique para escolher essa &dPokébola&7.\n&7Preço: &a%price% %currencyname%");
+        defaultMessages.put("menu.pokeball.lore", "&7Clique para escolher essa &dPokébola&7.\n&7Preço: &a%price% %currencyname%%discountlore%");
         defaultMessages.put("menu.pokeball.your", "&7Essa já é a sua &dPokébola&7.");
 
         //Mensagens no Chat
@@ -175,6 +177,7 @@ public class LangConfig {
         defaultMessages.put("chat.ivs.random", "&7Os &bIVs &7do seu &dPokémon &7foram randomizados.");
         defaultMessages.put("chat.onlyplayer", "&7Somente jogadores podem usar esse comando.");
         defaultMessages.put("chat.nopermission", "&7Você não tem permissão para fazer isso.");
+        defaultMessages.put("chat.nohidden", "&7Esse pokémon não possui uma &5Habilidade Oculta&7.");
 
         //Básico
         defaultMessages.put("yes", "Sim");
@@ -218,6 +221,18 @@ public class LangConfig {
         defaultMessages.put("statstype.speed.compact", "Veloc.");
         defaultMessages.put("statstype.accuracy.compact", "Precis.");
         defaultMessages.put("statstype.evasion.compact", "Evas.");
+
+        //Nomes de Modifier
+        defaultMessages.put("modifier.growth", "&cTamanho");
+        defaultMessages.put("modifier.shiny", "&cShiny");
+        defaultMessages.put("modifier.pokeball", "&cPokébola");
+        defaultMessages.put("modifier.ivs", "&cIVs");
+        defaultMessages.put("modifier.nature", "&cNature");
+        defaultMessages.put("modifier.gender", "&cGênero");
+        defaultMessages.put("modifier.hiddenability", "&cHabilidade Oculta");
+
+        //Outros
+        defaultMessages.put("discount.applied", "&7&oJá foi aplicado no valor o seu desconto de %discount%.");
 
         return defaultMessages;
     }

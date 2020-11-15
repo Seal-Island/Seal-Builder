@@ -31,11 +31,11 @@ public class PokemonShinyInventory {
 
     private static final MenuBuilder base = getBase();
 
-    public static Inventory get(Pokemon pokemon) {
+    public static Inventory get(Pokemon pokemon, Player player) {
         MenuBuilder menu = base.copy();
 
         Currency currency = getShinyCurrency(pokemon);
-        double price = getShinyPrice(pokemon);
+        double price = getShinyPrice(pokemon, player);
 
         String pokemonItemName = getFormattedCurrency(LangConfig.get("menu.shiny.pokemon.name"), currency, price);
         String pokemonItemLore = getFormattedCurrency(LangConfig.get("menu.shiny.pokemon.lore"), currency, price);
@@ -82,9 +82,9 @@ public class PokemonShinyInventory {
         return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(PluginConfig.currencyId);
     }
 
-    private static double getShinyPrice(Pokemon pokemon) {
+    private static double getShinyPrice(Pokemon pokemon, Player player) {
         Double override = ConfigUtils.getPriceOverrides(pokemon.getSpecies(), "shiny", "");
-        return override != null ? override : PluginConfig.shinyPrice;
+        return ConfigUtils.applyDiscount(override != null ? override : PluginConfig.shinyPrice, player);
     }
 
     private static MenuBuilder getBase() {

@@ -51,7 +51,7 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "pokeball")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.pokeball.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonPokeballInventory.get(pokemon), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonPokeballInventory.get(pokemon, player), SealBuilder.instance);
         }).build(31, pokeball));
 
         //Alternar Shiny
@@ -64,7 +64,7 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "shiny")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.shiny.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonShinyInventory.get(pokemon), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonShinyInventory.get(pokemon, player), SealBuilder.instance);
         }).build(19, shiny));
 
         //Alterar Tamanho do Pokémon
@@ -77,22 +77,27 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "growth")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.growth.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonGrowthInventory.get(pokemon), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonGrowthInventory.get(pokemon, player), SealBuilder.instance);
         }).build(28, growth));
 
         //Liberar Habilidade Oculta
-        boolean hasHiddenAbility = !(pokemon.getAbilitySlot() < 2 && pokemon.getBaseStats().abilities.length == 3 && pokemon.getBaseStats().abilities[2] != null);
-        ItemStack hiddenAbility = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.hiddenAbilityIcon)).add(Keys.ITEM_ENCHANTMENTS, hasHiddenAbility ? Collections.singletonList(Enchantment.builder().type(EnchantmentTypes.UNBREAKING).level(1).build()) : Collections.emptyList()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.hiddenability.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(hasHiddenAbility ? LangConfig.get("menu.edit.hiddenability.your") : LangConfig.get("menu.edit.hiddenability.lore"), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).add(Keys.HIDE_ENCHANTMENTS, true).build();
+        boolean hasHiddenAbility = pokemon.getBaseStats().abilities.length == 3 && pokemon.getBaseStats().abilities[2] != null;
+        boolean isHiddenAbility = !(pokemon.getAbilitySlot() < 2 && hasHiddenAbility);
+        ItemStack hiddenAbility = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.hiddenAbilityIcon)).add(Keys.ITEM_ENCHANTMENTS, isHiddenAbility ? Collections.singletonList(Enchantment.builder().type(EnchantmentTypes.UNBREAKING).level(1).build()) : Collections.emptyList()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.hiddenability.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(hasHiddenAbility ? isHiddenAbility ? LangConfig.get("menu.edit.hiddenability.your") : LangConfig.get("menu.edit.hiddenability.lore") : LangConfig.get("menu.edit.hiddenability.none"), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).add(Keys.HIDE_ENCHANTMENTS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click ->  {
             Player player = (Player) click.getSource();
-            if(hasHiddenAbility) return;
+            if(!hasHiddenAbility) {
+                player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.nohidden")));
+                return;
+            }
+            if(isHiddenAbility) return;
             if(ConfigUtils.isModifierDisabled("hiddenability")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.modifier.disabled")));
                 return;
             }
             if(ConfigUtils.isBlacklisted(pokemon, "hiddenability")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.hiddenability.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonHiddenAbilityInventory.get(pokemon), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonHiddenAbilityInventory.get(pokemon, player), SealBuilder.instance);
         }).build(25, hiddenAbility));
 
         //Alternar Gênero do Pokémon
@@ -107,7 +112,7 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "gender")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.gender.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonGenderInventory.get(pokemon), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonGenderInventory.get(pokemon, player), SealBuilder.instance);
         }).build(34, gender));
 
         //Alterar Natureza do Pokémon
@@ -120,7 +125,7 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "nature")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.nature.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonNatureInventory.get(pokemon), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonNatureInventory.get(pokemon, player), SealBuilder.instance);
         }).build(10, nature));
 
         //Alterar IVs do Pokémon
@@ -133,7 +138,7 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "ivs")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonIVsInventory.get(pokemon), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonIVsInventory.get(pokemon, player), SealBuilder.instance);
         }).build(16, ivs));
 
         return menu.build(SealBuilder.instance);

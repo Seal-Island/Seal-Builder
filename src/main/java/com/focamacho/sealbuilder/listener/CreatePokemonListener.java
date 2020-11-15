@@ -43,7 +43,7 @@ public class CreatePokemonListener {
                         return;
                     }
 
-                    InventoryUtils.openInventory(player, PokemonCreateInventory.get(specie), SealBuilder.instance);
+                    InventoryUtils.openInventory(player, PokemonCreateInventory.get(specie, player), SealBuilder.instance);
                 }
             }
         }

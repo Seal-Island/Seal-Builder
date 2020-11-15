@@ -33,14 +33,14 @@ public class PokemonNatureInventory {
 
     private static final MenuBuilder base = getBase();
 
-    public static Inventory get(Pokemon pokemon) {
+    public static Inventory get(Pokemon pokemon, Player player) {
         MenuBuilder menu = base.copy();
 
         //Retornar ao Menu de Edição
         ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon)).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
-            Player player = (Player) click.getSource();
-            InventoryUtils.openInventory(player, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+            Player player2 = (Player) click.getSource();
+            InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon), SealBuilder.instance);
         }).build(1, pokemonItem));
 
         StatsType[] types = {StatsType.Attack, StatsType.Defence, StatsType.SpecialAttack, StatsType.SpecialDefence, StatsType.Speed};
@@ -56,7 +56,7 @@ public class PokemonNatureInventory {
                 if(nature.increasedStat == StatsType.None && nature.decreasedStat == StatsType.None) neutralIndex++;
 
                 Currency currency = getNatureCurrency(pokemon.getSpecies(), nature);
-                double price = getNaturePrice(pokemon.getSpecies(), nature);
+                double price = getNaturePrice(pokemon.getSpecies(), nature, player);
 
                 String name = nature.getLocalizedName();
                 String lore;
@@ -108,9 +108,9 @@ public class PokemonNatureInventory {
         return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(PluginConfig.currencyId);
     }
 
-    private static double getNaturePrice(EnumSpecies pokemon, EnumNature nature) {
+    private static double getNaturePrice(EnumSpecies pokemon, EnumNature nature, Player player) {
         Double override = ConfigUtils.getPriceOverrides(pokemon, "nature", nature.toString());
-        return override != null ? override : PluginConfig.naturePrice;
+        return ConfigUtils.applyDiscount(override != null ? override : PluginConfig.naturePrice, player);
     }
 
     private static MenuBuilder getBase() {

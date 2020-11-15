@@ -33,14 +33,14 @@ public class PokemonPokeballInventory {
     private static final MenuBuilder base = getBase();
     private static final int[] pokeballSlots = new int[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
 
-    public static Inventory get(Pokemon pokemon) {
+    public static Inventory get(Pokemon pokemon, Player player) {
         MenuBuilder menu = base.copy();
 
         //Retornar ao Menu de Edição
         ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon)).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
-            Player player = (Player) click.getSource();
-            InventoryUtils.openInventory(player, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+            Player player2 = (Player) click.getSource();
+            InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon), SealBuilder.instance);
         }).build(4, pokemonItem));
 
         EnumPokeballs[] pokeballs = EnumPokeballs.values();
@@ -49,7 +49,7 @@ public class PokemonPokeballInventory {
             EnumPokeballs pokeball = pokeballs[i];
 
             Currency currency = getPokeballCurrency(pokemon.getSpecies(), pokeball);
-            double price = getPokeballPrice(pokemon.getSpecies(), pokeball);
+            double price = getPokeballPrice(pokemon.getSpecies(), pokeball, player);
 
             if(pokeball == pokemon.getCaughtBall()) {
                 ItemStack stack = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokeball.getItem()))).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(LangConfig.get("menu.pokeball.your"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
@@ -88,9 +88,9 @@ public class PokemonPokeballInventory {
         return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(PluginConfig.currencyId);
     }
 
-    private static double getPokeballPrice(EnumSpecies pokemon, EnumPokeballs pokeball) {
+    private static double getPokeballPrice(EnumSpecies pokemon, EnumPokeballs pokeball, Player player) {
         Double override = ConfigUtils.getPriceOverrides(pokemon, "pokeball", pokeball.getFilenamePrefix().toLowerCase());
-        return override != null ? override : PluginConfig.pokeballPrice;
+        return ConfigUtils.applyDiscount(override != null ? override : PluginConfig.pokeballPrice, player);
     }
 
     private static MenuBuilder getBase() {
