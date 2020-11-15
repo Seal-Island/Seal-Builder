@@ -9,7 +9,6 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.stats.Moveset;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.Stats;
 import com.pixelmonmod.pixelmon.enums.EnumNature;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
-import org.apache.commons.codec.language.bm.Lang;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
@@ -30,7 +29,7 @@ public class TextUtils {
         return getFormattedText(text.replace("%discountlore%", player.getOption("sealbuilder.discount").isPresent() ? LangConfig.get("discount.applied").replace("%discount%", player.getOption("sealbuilder.discount").get() + "%") : ("")));
     }
 
-    public static Text getFormattedText(String text, Pokemon pokemon) {
+    public static Text getFormattedText(String text, Pokemon pokemon, Player player) {
         EnumNature nature = pokemon.getNature();
         Stats stats = pokemon.getStats();
         Moveset moveset = pokemon.getMoveset();
@@ -81,10 +80,11 @@ public class TextUtils {
                 .replace("%pokemonmovethree%", moveset.get(2) == null ? LangConfig.get("none") : moveset.get(2).getActualMove().getLocalizedName())
                 .replace("%pokemonmovefour%", moveset.get(3) == null ? LangConfig.get("none") : moveset.get(3).getActualMove().getLocalizedName())
                 .replace("%pokemonivpercentage%", ivPercentageFormat.format((int) ((double) ivSum / 186.0 * 100.0)))
-                .replace("%pokemonevpercentage%", ivPercentageFormat.format((int) ((double) evSum / 510.0 * 100.0))
-                .replace("%blacklistedmodifiers%", getBlacklistedModifiers(pokemon.getSpecies())));
+                .replace("%pokemonevpercentage%", ivPercentageFormat.format((int) ((double) evSum / 510.0 * 100.0)))
+                .replace("%blacklistwarn%", ConfigUtils.getBlacklistedModifiers(pokemon.getSpecies()).size() > 1 ? LangConfig.get("menu.create.blacklistwarn") : "")
+                .replace("%blacklistedmodifiers%", getBlacklistedModifiers(pokemon.getSpecies()));
 
-        return pokemon.getOwnerPlayer() == null ? getFormattedText(pokemonPlaceholders) : getFormattedText(pokemonPlaceholders, (Player)pokemon.getOwnerPlayer());
+        return getFormattedText(pokemonPlaceholders, player);
     }
 
     private static String getBlacklistedModifiers(EnumSpecies specie) {
@@ -99,10 +99,13 @@ public class TextUtils {
         return blacklist.toString();
     }
 
-    public static List<Text> getFormattedLore(String text, Pokemon pokemon) {
+    public static List<Text> getFormattedLore(String text, Pokemon pokemon, Player player) {
         List<Text> lore = new ArrayList<>();
+
+        text = text.replace("%discountlore%", player.getOption("sealbuilder.discount").isPresent() ? LangConfig.get("discount.applied").replace("%discount%", player.getOption("sealbuilder.discount").get() + "%") : (""));
+
         for(String line : text.split("\n")) {
-            lore.add(getFormattedText(line, pokemon));
+            lore.add(getFormattedText(line, pokemon, player));
         }
         return lore;
     }

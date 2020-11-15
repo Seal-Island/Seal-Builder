@@ -37,10 +37,10 @@ public class PokemonNatureInventory {
         MenuBuilder menu = base.copy();
 
         //Retornar ao Menu de Edição
-        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon)).build();
+        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, player)).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player player2 = (Player) click.getSource();
-            InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+            InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon, player2), SealBuilder.instance);
         }).build(1, pokemonItem));
 
         StatsType[] types = {StatsType.Attack, StatsType.Defence, StatsType.SpecialAttack, StatsType.SpecialDefence, StatsType.Speed};
@@ -66,7 +66,7 @@ public class PokemonNatureInventory {
                 else lore = LangConfig.get("menu.nature.lore");
 
                 lore = getFormattedCurrency(lore.replace("%plusstats%", LangConfig.get("statstype." + types[column].name().toLowerCase())).replace("%minusstats%", LangConfig.get("statstype." + types[row].name().toLowerCase())), currency, price);
-                ItemStack stack = ItemStack.builder().fromItemStack(column == row ? neutral : icons[column]).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(name, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(lore, pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+                ItemStack stack = ItemStack.builder().fromItemStack(column == row ? neutral : icons[column]).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(name, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(lore, pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
 
                 menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
                     if(nature == pokemon.getNature()) return;
@@ -77,7 +77,7 @@ public class PokemonNatureInventory {
                         pokemon.setNature(nature);
                         MoneyUtils.removeMoney(source, BigDecimal.valueOf(price), currency);
                         source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.edit.nature"), currency, price)));
-                        InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+                        InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon, source), SealBuilder.instance);
                         return;
                     } else {
                         source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));

@@ -44,10 +44,10 @@ public class PokemonIVsInventory {
         MenuBuilder menu = base.copy();
 
         //Retornar ao Menu de Edição
-        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon)).build();
+        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, player)).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player player2 = (Player) click.getSource();
-            InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+            InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon, player2), SealBuilder.instance);
         }).build(11, pokemonItem));
 
         int[] ivs = pokemon.getIVs().getArray();
@@ -55,15 +55,15 @@ public class PokemonIVsInventory {
         for(int i = 0; i < 6; i++) {
             StatsType type = types[i];
 
-            ItemStack stack = ItemStack.builder().fromItemStack(icons[i].copy()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("statstype." + type.name().toLowerCase()), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+            ItemStack stack = ItemStack.builder().fromItemStack(icons[i].copy()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("statstype." + type.name().toLowerCase()), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
             stack.setQuantity(ivs[i]);
             menu.addClickableItem(new ClickableItem.Builder().build(slots[i], ivs[i] > 0 ? stack : ItemStack.empty()));
 
             Currency currency = getStatsCurrency(pokemon.getSpecies(), types[i]);
             double price = getStatsPrice(pokemon.getSpecies(), types[i], player);
 
-            ItemStack plus = ItemStack.builder().from(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("menu.ivs." + type.name().toLowerCase() + ".plus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(ivs[i] > 30 ? LangConfig.get("menu.ivs.limit.plus") : LangConfig.get("menu.ivs.lore.plus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon)).build();
-            ItemStack minus = ItemStack.builder().from(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("menu.ivs." + type.name().toLowerCase() + ".minus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(ivs[i] < 1 ? LangConfig.get("menu.ivs.limit.minus") : LangConfig.get("menu.ivs.lore.minus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon)).build();
+            ItemStack plus = ItemStack.builder().from(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("menu.ivs." + type.name().toLowerCase() + ".plus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(ivs[i] > 30 ? LangConfig.get("menu.ivs.limit.plus") : LangConfig.get("menu.ivs.lore.plus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon, player)).build();
+            ItemStack minus = ItemStack.builder().from(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("menu.ivs." + type.name().toLowerCase() + ".minus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(ivs[i] < 1 ? LangConfig.get("menu.ivs.limit.minus") : LangConfig.get("menu.ivs.lore.minus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon, player)).build();
 
             int index = i;
             menu.addClickableItem(new ClickableItem.Builder().onPrimary((click) -> {
@@ -87,7 +87,7 @@ public class PokemonIVsInventory {
             }).build(slots[i] + 2, plus));
         }
 
-        ItemStack random = ItemStack.builder().from(ItemStackUtils.getStackFromID("pixelmon:super_potion")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.ivs.random.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(LangConfig.get("menu.ivs.random.lore"), getStatsCurrency(pokemon.getSpecies(), types[0]), ConfigUtils.applyDiscount(PluginConfig.randomIvPrice, player)), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+        ItemStack random = ItemStack.builder().from(ItemStackUtils.getStackFromID("pixelmon:super_potion")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.ivs.random.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(LangConfig.get("menu.ivs.random.lore"), getStatsCurrency(pokemon.getSpecies(), types[0]), ConfigUtils.applyDiscount(PluginConfig.randomIvPrice, player)), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             if(!(click.getSource() instanceof Player)) return;
             Player player2 = (Player) click.getSource();
@@ -116,7 +116,7 @@ public class PokemonIVsInventory {
 
         boolean isMax = Arrays.stream(ivs).sum() >= 155;
         int missingPoints = 155 - Arrays.stream(ivs).sum();
-        ItemStack max = ItemStack.builder().from(ItemStackUtils.getStackFromID("pixelmon:hyper_potion")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.ivs.max.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(isMax ? LangConfig.get("menu.ivs.limit.plus") : LangConfig.get("menu.ivs.max.lore").replace("%ivmaxprice%", Utils.formatDouble(ConfigUtils.applyDiscount(PluginConfig.ivMaxPrice * missingPoints, player))), getStatsCurrency(pokemon.getSpecies(), types[0]), getStatsPrice(pokemon.getSpecies(), types[0], player)), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+        ItemStack max = ItemStack.builder().from(ItemStackUtils.getStackFromID("pixelmon:hyper_potion")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.ivs.max.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(isMax ? LangConfig.get("menu.ivs.limit.plus") : LangConfig.get("menu.ivs.max.lore").replace("%ivmaxprice%", Utils.formatDouble(ConfigUtils.applyDiscount(PluginConfig.ivMaxPrice * missingPoints, player))), getStatsCurrency(pokemon.getSpecies(), types[0]), getStatsPrice(pokemon.getSpecies(), types[0], player)), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             if(!(click.getSource() instanceof Player)) return;
             if(Arrays.stream(pokemon.getIVs().getArray()).sum() >= 155) return;
@@ -126,7 +126,7 @@ public class PokemonIVsInventory {
             double price = ConfigUtils.applyDiscount(pointsToAdd * PluginConfig.ivMaxPrice, player2);
             if(MoneyUtils.hasMoney(player2, BigDecimal.valueOf(price), getStatsCurrency(pokemon.getSpecies(), types[0]))) {
                 pokemon.getIVs().fillFromArray(new int[]{31, 31, 31, 31, 31, 31});
-                player2.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.plus"), pokemon));
+                player2.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.plus"), pokemon, player));
                 MoneyUtils.removeMoney(player2, BigDecimal.valueOf(price), getStatsCurrency(pokemon.getSpecies(), types[0]));
                 updateStats(pokemon, click.getTargetInventory(), player2);
             } else {
@@ -141,10 +141,10 @@ public class PokemonIVsInventory {
         int[] ivs = pokemon.getIVs().getArray();
 
         if(ivs[index] + quantity > 31) {
-            player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.limit.max"), pokemon));
+            player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.limit.max"), pokemon, player));
             return;
         } else if(ivs[index] + quantity < 0) {
-            player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.limit.max"), pokemon));
+            player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.limit.max"), pokemon, player));
             return;
         }
 
@@ -154,9 +154,9 @@ public class PokemonIVsInventory {
             ivs[index] += quantity;
             pokemon.getIVs().fillFromArray(ivs);
             if(quantity > 0) {
-                player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.plus"), pokemon));
+                player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.plus"), pokemon, player));
             } else {
-                player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.minus"), pokemon));
+                player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.minus"), pokemon, player));
             }
             MoneyUtils.removeMoney(player, BigDecimal.valueOf(finalPrice), currency);
         } else {
@@ -173,17 +173,17 @@ public class PokemonIVsInventory {
                 StatsType type = types[index];
                 int slotIndex = slot.getInventoryProperty(SlotIndex.class).get().getValue();
                 if(slotIndex == 11) {
-                    ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon)).build();
+                    ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, player)).build();
                     slot.set(pokemonItem);
                 } else if(slotIndex == 38) {
                     boolean isMax = Arrays.stream(ivs).sum() >= 155;
                     int missingPoints = 155 - Arrays.stream(ivs).sum();
-                    ItemStack max = ItemStack.builder().from(ItemStackUtils.getStackFromID("pixelmon:hyper_potion")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.ivs.max.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(isMax ? LangConfig.get("menu.ivs.limit.plus") : LangConfig.get("menu.ivs.max.lore").replace("%ivmaxprice%", Utils.formatDouble(PluginConfig.ivMaxPrice * missingPoints)), getStatsCurrency(pokemon.getSpecies(), types[0]), getStatsPrice(pokemon.getSpecies(), types[0], player)), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+                    ItemStack max = ItemStack.builder().from(ItemStackUtils.getStackFromID("pixelmon:hyper_potion")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.ivs.max.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(isMax ? LangConfig.get("menu.ivs.limit.plus") : LangConfig.get("menu.ivs.max.lore").replace("%ivmaxprice%", Utils.formatDouble(PluginConfig.ivMaxPrice * missingPoints)), getStatsCurrency(pokemon.getSpecies(), types[0]), getStatsPrice(pokemon.getSpecies(), types[0], player)), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
                     slot.set(max);
                 } else {
                     for(int i : PokemonIVsInventory.slots) {
                         if(slotIndex == i) {
-                            ItemStack stack = ItemStack.builder().fromItemStack(icons[index].copy()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("statstype." + type.name().toLowerCase()), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+                            ItemStack stack = ItemStack.builder().fromItemStack(icons[index].copy()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("statstype." + type.name().toLowerCase()), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
                             stack.setQuantity(ivs[index]);
                             slot.set(ivs[index] > 0 ? stack : ItemStack.empty());
                             break;
@@ -191,14 +191,14 @@ public class PokemonIVsInventory {
                             Currency currency = getStatsCurrency(pokemon.getSpecies(), type);
                             double price = getStatsPrice(pokemon.getSpecies(), type, player);
 
-                            ItemStack minus = ItemStack.builder().from(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("menu.ivs." + type.name().toLowerCase() + ".minus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(ivs[index] < 1 ? LangConfig.get("menu.ivs.limit.minus") : LangConfig.get("menu.ivs.lore.minus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon)).build();
+                            ItemStack minus = ItemStack.builder().from(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("menu.ivs." + type.name().toLowerCase() + ".minus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(ivs[index] < 1 ? LangConfig.get("menu.ivs.limit.minus") : LangConfig.get("menu.ivs.lore.minus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon, player)).build();
                             slot.set(minus);
                             break;
                         } else if(slotIndex == i + 2) {
                             Currency currency = getStatsCurrency(pokemon.getSpecies(), type);
                             double price = getStatsPrice(pokemon.getSpecies(), type, player);
 
-                            ItemStack plus = ItemStack.builder().from(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("menu.ivs." + type.name().toLowerCase() + ".plus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(ivs[index] > 30 ? LangConfig.get("menu.ivs.limit.plus") : LangConfig.get("menu.ivs.lore.plus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon)).build();
+                            ItemStack plus = ItemStack.builder().from(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("menu.ivs." + type.name().toLowerCase() + ".plus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(ivs[index] > 30 ? LangConfig.get("menu.ivs.limit.plus") : LangConfig.get("menu.ivs.lore.plus").replace("%priceiv10%", Utils.formatDouble(price * 10)), currency, price), pokemon, player)).build();
                             slot.set(plus);
                             index++;
                             break;

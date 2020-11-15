@@ -47,12 +47,12 @@ public class PokemonHiddenAbilityInventory {
         Pokemon fakeHiddenAbilityPokemon = Pixelmon.pokemonFactory.create(pokemon.getSpecies());
         fakeHiddenAbilityPokemon.setAbilitySlot(2);
 
-        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(fakeHiddenAbilityPokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(pokemonItemName, fakeHiddenAbilityPokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(pokemonItemLore, fakeHiddenAbilityPokemon)).build();
-        ItemStack cancelItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(cancelItemName, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(cancelItemLore, pokemon)).build();
-        ItemStack confirmItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(confirmItemName, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(confirmItemLore, pokemon)).build();
+        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(fakeHiddenAbilityPokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(pokemonItemName, fakeHiddenAbilityPokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(pokemonItemLore, fakeHiddenAbilityPokemon, player)).build();
+        ItemStack cancelItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(cancelItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(cancelItemLore, pokemon, player)).build();
+        ItemStack confirmItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(confirmItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(confirmItemLore, pokemon, player)).build();
 
         menu.addClickableItem(new ClickableItem.Builder().build(13, pokemonItem));
-        menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory((Player) click.getSource(), PokemonEditInventory.get(pokemon), SealBuilder.instance)).build(10, cancelItem));
+        menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory((Player) click.getSource(), PokemonEditInventory.get(pokemon, (Player) click.getSource()), SealBuilder.instance)).build(10, cancelItem));
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player source = (Player) click.getSource();
 
@@ -60,7 +60,7 @@ public class PokemonHiddenAbilityInventory {
                 MoneyUtils.removeMoney(source, BigDecimal.valueOf(price), currency);
                 pokemon.setAbilitySlot(2);
                 source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.edit.hiddenability"), currency, price)));
-                InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+                InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon, source), SealBuilder.instance);
                 return;
             } else {
                 source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));

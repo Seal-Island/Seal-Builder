@@ -45,8 +45,8 @@ public class PokemonSelectInventory {
             Pokemon pokemon = party.get(i);
 
             if(pokemon != null) {
-                ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon)).build();
-                menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory(player, PokemonEditInventory.get(pokemon), SealBuilder.instance)).build(basePokemonSlots[i], pokemonItem));
+                ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, player)).build();
+                menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory(player, PokemonEditInventory.get(pokemon, player), SealBuilder.instance)).build(basePokemonSlots[i], pokemonItem));
             } else {
                 menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
                     //Criar pokémon

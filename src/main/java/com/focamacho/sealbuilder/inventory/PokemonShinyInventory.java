@@ -47,12 +47,12 @@ public class PokemonShinyInventory {
         Pokemon fakeShinyPokemon = Pixelmon.pokemonFactory.create(pokemon.getSpecies());
         fakeShinyPokemon.setShiny(!pokemon.isShiny());
 
-        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(fakeShinyPokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(pokemonItemName, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(pokemonItemLore, pokemon)).build();
-        ItemStack cancelItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(cancelItemName, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(cancelItemLore, pokemon)).build();
-        ItemStack confirmItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(confirmItemName, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(confirmItemLore, pokemon)).build();
+        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(fakeShinyPokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(pokemonItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(pokemonItemLore, pokemon, player)).build();
+        ItemStack cancelItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(cancelItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(cancelItemLore, pokemon, player)).build();
+        ItemStack confirmItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(confirmItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(confirmItemLore, pokemon, player)).build();
 
         menu.addClickableItem(new ClickableItem.Builder().build(13, pokemonItem));
-        menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory((Player) click.getSource(), PokemonEditInventory.get(pokemon), SealBuilder.instance)).build(10, cancelItem));
+        menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory((Player) click.getSource(), PokemonEditInventory.get(pokemon, (Player) click.getSource()), SealBuilder.instance)).build(10, cancelItem));
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player source = (Player) click.getSource();
 
@@ -60,7 +60,7 @@ public class PokemonShinyInventory {
                 MoneyUtils.removeMoney(source, BigDecimal.valueOf(price), currency);
                 pokemon.setShiny(!pokemon.isShiny());
                 source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.edit.shiny"), currency, price)));
-                InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+                InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon, source), SealBuilder.instance);
                 return;
             } else {
                 source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));

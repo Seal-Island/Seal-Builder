@@ -117,8 +117,8 @@ public class LangConfig {
         defaultMessages.put("menu.ivs.speed.minus", "&cDiminuir Velocidade");
         defaultMessages.put("menu.ivs.limit.plus", "&7Limite máximo atingido.");
         defaultMessages.put("menu.ivs.limit.minus", "&7Limite mínimo atingido.");
-        defaultMessages.put("menu.ivs.lore.plus", "&7Clique para aumentar este &bIV &7em &b1 &7por &a%price%&7.\n&7Shift + Clique para aumentar este &bIV &7em &b10 &7por &a%priceiv10% %currencyname%&7.%discountlore%");
-        defaultMessages.put("menu.ivs.lore.minus", "&7Clique para diminuir este &bIV &7em &b1 &7por &a%price%&7.\n&7Shift + Clique para diminuir este &bIV &7em &b10 &7por &a%priceiv10% %currencyname%&7.%discountlore%");
+        defaultMessages.put("menu.ivs.lore.plus", "&7Clique para aumentar este &bIV &7em &b1 &7por &a%price% %currencyname%&7.\n&7Shift + Clique para aumentar este &bIV &7em &b10 &7por &a%priceiv10% %currencyname%&7.%discountlore%");
+        defaultMessages.put("menu.ivs.lore.minus", "&7Clique para diminuir este &bIV &7em &b1 &7por &a%price% %currencyname%&7.\n&7Shift + Clique para diminuir este &bIV &7em &b10 &7por &a%priceiv10% %currencyname%&7.%discountlore%");
         defaultMessages.put("menu.ivs.max.name", "&bIVs &dmáximos");
         defaultMessages.put("menu.ivs.max.lore", "&7Clique para deixar todos os &bIVs &7do\n&7seu &dPokémon &7no máximo por &a%ivmaxprice% %currencyname%&7.%discountlore%");
         defaultMessages.put("menu.ivs.random.name", "&bIVs &caleatórios");
@@ -232,7 +232,7 @@ public class LangConfig {
         defaultMessages.put("modifier.hiddenability", "&cHabilidade Oculta");
 
         //Outros
-        defaultMessages.put("discount.applied", "&7&oJá foi aplicado no valor o seu desconto de %discount%.");
+        defaultMessages.put("discount.applied", "\n\n&7&oJá foi aplicado no valor o seu desconto de %discount%.");
 
         return defaultMessages;
     }

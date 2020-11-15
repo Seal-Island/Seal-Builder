@@ -37,10 +37,10 @@ public class PokemonPokeballInventory {
         MenuBuilder menu = base.copy();
 
         //Retornar ao Menu de Edição
-        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon)).build();
+        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, player)).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player player2 = (Player) click.getSource();
-            InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+            InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon, player2), SealBuilder.instance);
         }).build(4, pokemonItem));
 
         EnumPokeballs[] pokeballs = EnumPokeballs.values();
@@ -52,12 +52,12 @@ public class PokemonPokeballInventory {
             double price = getPokeballPrice(pokemon.getSpecies(), pokeball, player);
 
             if(pokeball == pokemon.getCaughtBall()) {
-                ItemStack stack = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokeball.getItem()))).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(LangConfig.get("menu.pokeball.your"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+                ItemStack stack = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokeball.getItem()))).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(LangConfig.get("menu.pokeball.your"), currency, price), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
                 menu.addClickableItem(new ClickableItem.Builder().build(pokeballSlots[i], stack));
                 continue;
             }
 
-            ItemStack stack = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokeball.getItem()))).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(LangConfig.get("menu.pokeball.lore"), currency, price), pokemon)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+            ItemStack stack = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokeball.getItem()))).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(LangConfig.get("menu.pokeball.lore"), currency, price), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
             menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
                 Player source = (Player) click.getSource();
 
@@ -65,7 +65,7 @@ public class PokemonPokeballInventory {
                     pokemon.setCaughtBall(pokeball);
                     MoneyUtils.removeMoney(source, BigDecimal.valueOf(price), currency);
                     source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.edit.pokeball"), currency, price)));
-                    InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+                    InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon, source), SealBuilder.instance);
                     return;
                 } else {
                     source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));

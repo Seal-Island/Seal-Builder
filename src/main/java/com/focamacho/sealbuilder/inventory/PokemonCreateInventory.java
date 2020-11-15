@@ -49,9 +49,9 @@ public class PokemonCreateInventory {
         String confirmItemName = getFormattedCurrency(LangConfig.get("menu.create.confirm.name"), currency, price);
         String confirmItemLore = getFormattedCurrency(LangConfig.get("menu.create.confirm.lore"), currency, price);
 
-        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(pokemonItemName, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(pokemonItemLore, pokemon)).build();
-        ItemStack cancelItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(cancelItemName, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(cancelItemLore, pokemon)).build();
-        ItemStack confirmItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(confirmItemName, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(confirmItemLore, pokemon)).build();
+        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(pokemonItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(pokemonItemLore, pokemon, player)).build();
+        ItemStack cancelItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(cancelItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(cancelItemLore, pokemon, player)).build();
+        ItemStack confirmItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(confirmItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(confirmItemLore, pokemon, player)).build();
 
         menu.addClickableItem(new ClickableItem.Builder().build(13, pokemonItem));
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.closePlayerInventory((Player) click.getSource(), SealBuilder.instance)).build(10, cancelItem));

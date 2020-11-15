@@ -48,12 +48,12 @@ public class PokemonGenderInventory {
         Pokemon fakeGenderPokemon = Pixelmon.pokemonFactory.create(pokemon.getSpecies());
         fakeGenderPokemon.setGender(pokemon.getGender() == Gender.Female ? Gender.Male : Gender.Female);
 
-        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(fakeGenderPokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(pokemonItemName, fakeGenderPokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(pokemonItemLore, fakeGenderPokemon)).build();
-        ItemStack cancelItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(cancelItemName, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(cancelItemLore, pokemon)).build();
-        ItemStack confirmItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(confirmItemName, pokemon)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(confirmItemLore, pokemon)).build();
+        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(fakeGenderPokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(pokemonItemName, fakeGenderPokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(pokemonItemLore, fakeGenderPokemon, player)).build();
+        ItemStack cancelItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.cancelItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(cancelItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(cancelItemLore, pokemon, player)).build();
+        ItemStack confirmItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(confirmItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(confirmItemLore, pokemon, player)).build();
 
         menu.addClickableItem(new ClickableItem.Builder().build(13, pokemonItem));
-        menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory((Player) click.getSource(), PokemonEditInventory.get(pokemon), SealBuilder.instance)).build(10, cancelItem));
+        menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory((Player) click.getSource(), PokemonEditInventory.get(pokemon, (Player) click.getSource()), SealBuilder.instance)).build(10, cancelItem));
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player source = (Player) click.getSource();
 
@@ -61,7 +61,7 @@ public class PokemonGenderInventory {
                 MoneyUtils.removeMoney(source, BigDecimal.valueOf(price), currency);
                 pokemon.setGender(fakeGenderPokemon.getGender());
                 source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.edit.gender"), currency, price)));
-                InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon), SealBuilder.instance);
+                InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon, source), SealBuilder.instance);
                 return;
             } else {
                 source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));
