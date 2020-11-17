@@ -48,7 +48,7 @@ public class LangConfig {
         defaultMessages.put("menu.create.cancel.name", "&cCancelar");
         defaultMessages.put("menu.create.cancel.lore", "&7Fechar o menu.");
         defaultMessages.put("menu.create.confirm.name", "&aConfirmar");
-        defaultMessages.put("menu.create.confirm.lore", "&7Isso vai lhe custar &c%price% %currencyname%&7.%discountlore%");
+        defaultMessages.put("menu.create.confirm.lore", "&7Isso vai lhe custar &c%price% %currencyname%&7.%blacklistwarn%%discountlore%");
         defaultMessages.put("menu.create.pokemon.name", "&d%pokemonname%");
         defaultMessages.put("menu.create.pokemon.lore", "&7Preço: &d&c%price% %currencyname%%blacklistwarn%%discountlore%");
         defaultMessages.put("menu.create.blacklistwarn", "\n&7Atenção! Os seguintes modificadores estão\n&7bloqueados nesse &dPokémon&7:");

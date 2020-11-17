@@ -32,28 +32,28 @@ public class PokemonSelectInventory {
     private static final MenuBuilder base = getBase();
     private static final int[] basePokemonSlots = new int[]{12, 13, 14, 21, 22, 23};
 
-    public static Inventory get(Player player) {
-        EntityPlayerMP playerMP = (EntityPlayerMP) player;
+    public static Inventory get(Player player, Player target) {
+        EntityPlayerMP playerMP = (EntityPlayerMP) target;
         PlayerPartyStorage party = Pixelmon.storageManager.getParty(playerMP);
 
         MenuBuilder menu = base.copy();
 
-        boolean canCreatePokemon = PluginConfig.createPokemon && player.hasPermission(PluginConfig.createPokemonPermission);
-        ItemStack noPokemonItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.noPokemonItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(canCreatePokemon ? LangConfig.get("menu.main.create") : LangConfig.get("menu.main.nopokemon"), player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+        boolean canCreatePokemon = PluginConfig.createPokemon && target.hasPermission(PluginConfig.createPokemonPermission);
+        ItemStack noPokemonItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.noPokemonItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(canCreatePokemon ? LangConfig.get("menu.main.create") : LangConfig.get("menu.main.nopokemon"), target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
 
         for(int i = 0; i < basePokemonSlots.length; i++) {
             Pokemon pokemon = party.get(i);
 
             if(pokemon != null) {
-                ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, player)).build();
-                menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory(player, PokemonEditInventory.get(pokemon, player), SealBuilder.instance)).build(basePokemonSlots[i], pokemonItem));
+                ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, target)).build();
+                menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory(player, PokemonEditInventory.get(pokemon, target), SealBuilder.instance)).build(basePokemonSlots[i], pokemonItem));
             } else {
                 menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
                     //Criar pokémon
                     if(canCreatePokemon) {
                         Player source = (Player) click.getSource();
                         source.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.create"), source));
-                        CreatePokemonListener.players.add(source.getUniqueId());
+                        CreatePokemonListener.players.put(source.getUniqueId(), target);
                         Task.builder().delay(2, TimeUnit.MINUTES).execute(() -> CreatePokemonListener.players.remove(source.getUniqueId())).submit(SealBuilder.instance);
                         InventoryUtils.closePlayerInventory(source, SealBuilder.instance);
                     }

@@ -31,18 +31,18 @@ public class PokemonEditInventory {
 
     private static final MenuBuilder base = getBase();
 
-    public static Inventory get(Pokemon pokemon, Player plyer) {
+    public static Inventory get(Pokemon pokemon, Player target) {
         MenuBuilder menu = base.copy();
 
         //Retornar ao Menu de Seleção
-        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, plyer)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, plyer)).build();
+        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, target)).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player player = (Player) click.getSource();
-            InventoryUtils.openInventory(player, PokemonSelectInventory.get(player), SealBuilder.instance);
+            InventoryUtils.openInventory(player, PokemonSelectInventory.get(player, target), SealBuilder.instance);
         }).build(22, pokemonItem));
 
         //Modificar Pokébola
-        ItemStack pokeball = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokemon.getCaughtBall().getItem()))).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.pokeball.name"), pokemon, plyer)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.edit.pokeball.lore"), pokemon, plyer)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+        ItemStack pokeball = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokemon.getCaughtBall().getItem()))).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.pokeball.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.edit.pokeball.lore"), pokemon, target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player player = (Player) click.getSource();
             if(ConfigUtils.isModifierDisabled("pokeball")) {
@@ -51,11 +51,11 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "pokeball")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.pokeball.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonPokeballInventory.get(pokemon, player), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonPokeballInventory.get(pokemon, target), SealBuilder.instance);
         }).build(31, pokeball));
 
         //Alternar Shiny
-        ItemStack shiny = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.shinyIcon)).add(Keys.ITEM_ENCHANTMENTS, pokemon.isShiny() ? Collections.singletonList(Enchantment.builder().type(EnchantmentTypes.UNBREAKING).level(1).build()) : Collections.emptyList()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.shiny.name"), pokemon, plyer)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.edit.shiny.lore"), pokemon, plyer)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).add(Keys.HIDE_ENCHANTMENTS, true).build();
+        ItemStack shiny = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.shinyIcon)).add(Keys.ITEM_ENCHANTMENTS, pokemon.isShiny() ? Collections.singletonList(Enchantment.builder().type(EnchantmentTypes.UNBREAKING).level(1).build()) : Collections.emptyList()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.shiny.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.edit.shiny.lore"), pokemon, target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).add(Keys.HIDE_ENCHANTMENTS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click ->  {
             Player player = (Player) click.getSource();
             if(ConfigUtils.isModifierDisabled("shiny")) {
@@ -64,11 +64,11 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "shiny")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.shiny.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonShinyInventory.get(pokemon, player), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonShinyInventory.get(pokemon, target), SealBuilder.instance);
         }).build(19, shiny));
 
         //Alterar Tamanho do Pokémon
-        ItemStack growth = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.growthIcon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.growth.name"), pokemon, plyer)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.edit.growth.lore"), pokemon, plyer)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+        ItemStack growth = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.growthIcon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.growth.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.edit.growth.lore"), pokemon, target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player player = (Player) click.getSource();
             if(ConfigUtils.isModifierDisabled("growth")) {
@@ -77,13 +77,13 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "growth")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.growth.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonGrowthInventory.get(pokemon, player), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonGrowthInventory.get(pokemon, target), SealBuilder.instance);
         }).build(28, growth));
 
         //Liberar Habilidade Oculta
         boolean hasHiddenAbility = pokemon.getBaseStats().abilities.length == 3 && pokemon.getBaseStats().abilities[2] != null;
         boolean isHiddenAbility = !(pokemon.getAbilitySlot() < 2 && hasHiddenAbility);
-        ItemStack hiddenAbility = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.hiddenAbilityIcon)).add(Keys.ITEM_ENCHANTMENTS, isHiddenAbility ? Collections.singletonList(Enchantment.builder().type(EnchantmentTypes.UNBREAKING).level(1).build()) : Collections.emptyList()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.hiddenability.name"), pokemon, plyer)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(hasHiddenAbility ? isHiddenAbility ? LangConfig.get("menu.edit.hiddenability.your") : LangConfig.get("menu.edit.hiddenability.lore") : LangConfig.get("menu.edit.hiddenability.none"), pokemon, plyer)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).add(Keys.HIDE_ENCHANTMENTS, true).build();
+        ItemStack hiddenAbility = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.hiddenAbilityIcon)).add(Keys.ITEM_ENCHANTMENTS, isHiddenAbility ? Collections.singletonList(Enchantment.builder().type(EnchantmentTypes.UNBREAKING).level(1).build()) : Collections.emptyList()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.hiddenability.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(hasHiddenAbility ? isHiddenAbility ? LangConfig.get("menu.edit.hiddenability.your") : LangConfig.get("menu.edit.hiddenability.lore") : LangConfig.get("menu.edit.hiddenability.none"), pokemon, target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).add(Keys.HIDE_ENCHANTMENTS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click ->  {
             Player player = (Player) click.getSource();
             if(!hasHiddenAbility) {
@@ -97,12 +97,12 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "hiddenability")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.hiddenability.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonHiddenAbilityInventory.get(pokemon, player), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonHiddenAbilityInventory.get(pokemon, target), SealBuilder.instance);
         }).build(25, hiddenAbility));
 
         //Alternar Gênero do Pokémon
         boolean hasOtherGender = Math.abs(pokemon.getBaseStats().malePercent - 50) < 50;
-        ItemStack gender = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(pokemon.getGender() == Gender.None ? PluginConfig.noGenderIcon : pokemon.getGender() == Gender.Female ? PluginConfig.femaleGenderIcon : PluginConfig.maleGenderIcon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.gender.name"), pokemon, plyer)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(hasOtherGender ? LangConfig.get("menu.edit.gender.lore") : LangConfig.get("menu.edit.gender.nogender"), pokemon, plyer)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).add(Keys.HIDE_ENCHANTMENTS, true).build();
+        ItemStack gender = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(pokemon.getGender() == Gender.None ? PluginConfig.noGenderIcon : pokemon.getGender() == Gender.Female ? PluginConfig.femaleGenderIcon : PluginConfig.maleGenderIcon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.gender.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(hasOtherGender ? LangConfig.get("menu.edit.gender.lore") : LangConfig.get("menu.edit.gender.nogender"), pokemon, target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).add(Keys.HIDE_ENCHANTMENTS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click ->  {
             Player player = (Player) click.getSource();
             if(!hasOtherGender) return;
@@ -112,11 +112,11 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "gender")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.gender.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonGenderInventory.get(pokemon, player), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonGenderInventory.get(pokemon, target), SealBuilder.instance);
         }).build(34, gender));
 
         //Alterar Natureza do Pokémon
-        ItemStack nature = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.natureIcon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.nature.name"), pokemon, plyer)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.edit.nature.lore"), pokemon, plyer)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+        ItemStack nature = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.natureIcon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.nature.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.edit.nature.lore"), pokemon, target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player player = (Player) click.getSource();
             if(ConfigUtils.isModifierDisabled("nature")) {
@@ -125,11 +125,11 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "nature")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.nature.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonNatureInventory.get(pokemon, player), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonNatureInventory.get(pokemon, target), SealBuilder.instance);
         }).build(10, nature));
 
         //Alterar IVs do Pokémon
-        ItemStack ivs = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.ivIcon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.ivs.name"), pokemon, plyer)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.edit.ivs.lore"), pokemon, plyer)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+        ItemStack ivs = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.ivIcon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.ivs.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.edit.ivs.lore"), pokemon, target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player player = (Player) click.getSource();
             if(ConfigUtils.isModifierDisabled("ivs")) {
@@ -138,7 +138,7 @@ public class PokemonEditInventory {
             }
             if(ConfigUtils.isBlacklisted(pokemon, "ivs")) {
                 player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.ivs.blacklist")));
-            } else InventoryUtils.openInventory(player, PokemonIVsInventory.get(pokemon, player), SealBuilder.instance);
+            } else InventoryUtils.openInventory(player, PokemonIVsInventory.get(pokemon, target), SealBuilder.instance);
         }).build(16, ivs));
 
         return menu.build(SealBuilder.instance);

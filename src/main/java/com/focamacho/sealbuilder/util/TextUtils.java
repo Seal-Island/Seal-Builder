@@ -80,9 +80,7 @@ public class TextUtils {
                 .replace("%pokemonmovethree%", moveset.get(2) == null ? LangConfig.get("none") : moveset.get(2).getActualMove().getLocalizedName())
                 .replace("%pokemonmovefour%", moveset.get(3) == null ? LangConfig.get("none") : moveset.get(3).getActualMove().getLocalizedName())
                 .replace("%pokemonivpercentage%", ivPercentageFormat.format((int) ((double) ivSum / 186.0 * 100.0)))
-                .replace("%pokemonevpercentage%", ivPercentageFormat.format((int) ((double) evSum / 510.0 * 100.0)))
-                .replace("%blacklistwarn%", ConfigUtils.getBlacklistedModifiers(pokemon.getSpecies()).size() > 1 ? LangConfig.get("menu.create.blacklistwarn") : "")
-                .replace("%blacklistedmodifiers%", getBlacklistedModifiers(pokemon.getSpecies()));
+                .replace("%pokemonevpercentage%", ivPercentageFormat.format((int) ((double) evSum / 510.0 * 100.0)));
 
         return getFormattedText(pokemonPlaceholders, player);
     }
@@ -102,7 +100,8 @@ public class TextUtils {
     public static List<Text> getFormattedLore(String text, Pokemon pokemon, Player player) {
         List<Text> lore = new ArrayList<>();
 
-        text = text.replace("%discountlore%", player.getOption("sealbuilder.discount").isPresent() ? LangConfig.get("discount.applied").replace("%discount%", player.getOption("sealbuilder.discount").get() + "%") : (""));
+        text = text.replace("%discountlore%", player.getOption("sealbuilder.discount").isPresent() ? LangConfig.get("discount.applied").replace("%discount%", player.getOption("sealbuilder.discount").get() + "%") : "");
+        text = text.replace("%blacklistwarn%", ConfigUtils.getBlacklistedModifiers(pokemon.getSpecies()).size() > 1 ? LangConfig.get("menu.create.blacklistwarn") : "").replace("%blacklistedmodifiers%", getBlacklistedModifiers(pokemon.getSpecies()));
 
         for(String line : text.split("\n")) {
             lore.add(getFormattedText(line, pokemon, player));
