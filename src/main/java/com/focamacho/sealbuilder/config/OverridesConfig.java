@@ -70,7 +70,7 @@ public class OverridesConfig {
             try {
                 JSONObject object = array.getJSONObject(i);
                 EnumSpecies pokemon = EnumSpecies.getFromNameAnyCase(object.getString("pokemon"));
-                String currency = object.optString("currency", "default");
+                String currency = object.optString("currency", PluginConfig.currencyId);
                 double price = object.getDouble("price");
 
                 if(object.getString("pokemon").equalsIgnoreCase("legendary")) {
@@ -91,7 +91,7 @@ public class OverridesConfig {
             try {
                 JSONObject object = array.getJSONObject(i);
                 EnumSpecies pokemon = EnumSpecies.getFromNameAnyCase(object.getString("pokemon"));
-                String currency = object.optString("currency", "default");
+                String currency = object.optString("currency", PluginConfig.currencyId);
                 double price = object.getDouble("price");
 
                 if(object.getString("pokemon").equalsIgnoreCase("legendary")) {
@@ -112,7 +112,7 @@ public class OverridesConfig {
             try {
                 JSONObject object = array.getJSONObject(i);
                 EnumSpecies pokemon = EnumSpecies.getFromNameAnyCase(object.getString("pokemon"));
-                String currency = object.optString("currency", "default");
+                String currency = object.optString("currency", PluginConfig.currencyId);
                 double price = object.getDouble("price");
 
                 if(object.getString("pokemon").equalsIgnoreCase("legendary")) {
@@ -133,7 +133,7 @@ public class OverridesConfig {
             try {
                 JSONObject object = array.getJSONObject(i);
                 EnumSpecies pokemon = EnumSpecies.getFromNameAnyCase(object.getString("pokemon"));
-                String currency = object.optString("currency", "default");
+                String currency = object.optString("currency", PluginConfig.currencyId);
                 double price = object.getDouble("price");
 
                 if(object.getString("pokemon").equalsIgnoreCase("legendary")) {
@@ -155,7 +155,7 @@ public class OverridesConfig {
                 JSONObject object = array.getJSONObject(i);
                 EnumSpecies specie = EnumSpecies.getFromNameAnyCase(object.optString("pokemon"));
                 EnumNature nature = EnumNature.natureFromString(object.optString("nature"));
-                String currency = object.optString("currency");
+                String currency = object.optString("currency", PluginConfig.currencyId);
                 double price = object.getDouble("price");
 
                 if(object.optString("pokemon").equalsIgnoreCase("legendary")) {
@@ -185,7 +185,7 @@ public class OverridesConfig {
                 JSONObject object = array.getJSONObject(i);
                 EnumSpecies specie = EnumSpecies.getFromNameAnyCase(object.optString("pokemon"));
                 EnumPokeballs pokeball = EnumPokeballs.getPokeballFromString(object.optString("pokeball"));
-                String currency = object.optString("currency");
+                String currency = object.optString("currency", PluginConfig.currencyId);
                 double price = object.getDouble("price");
 
                 if(object.optString("pokemon").equalsIgnoreCase("legendary")) {
@@ -216,7 +216,7 @@ public class OverridesConfig {
                 JSONObject object = array.getJSONObject(i);
                 EnumSpecies specie = EnumSpecies.getFromNameAnyCase(object.optString("pokemon"));
                 EnumGrowth growth = EnumGrowth.growthFromString(object.optString("growth"));
-                String currency = object.optString("currency");
+                String currency = object.optString("currency", PluginConfig.currencyId);
                 double price = object.getDouble("price");
 
                 if(object.optString("pokemon").equalsIgnoreCase("legendary")) {
@@ -258,7 +258,7 @@ public class OverridesConfig {
                     }
                 }
 
-                String currency = object.optString("currency");
+                String currency = object.optString("currency", PluginConfig.currencyId);
                 double price = object.getDouble("price");
 
                 if(object.optString("pokemon").equalsIgnoreCase("legendary")) {
