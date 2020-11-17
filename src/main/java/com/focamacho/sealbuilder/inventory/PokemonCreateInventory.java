@@ -63,7 +63,7 @@ public class PokemonCreateInventory {
                 if(party.add(pokemon)) {
                     MoneyUtils.removeMoney(source, BigDecimal.valueOf(price), currency);
                     source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.buy.success"), currency, price)));
-                    InventoryUtils.openInventory(source, PokemonSelectInventory.get(source), SealBuilder.instance);
+                    InventoryUtils.openInventory(source, PokemonSelectInventory.get(source, player), SealBuilder.instance);
                     return;
                 }
             } else {

@@ -25,12 +25,12 @@ public class BuilderCommand implements CommandExecutor {
 
         if(args.getOne("player").isPresent()) {
             if(src.hasPermission("sealbuilder.admin")) {
-                InventoryUtils.openInventory(player, PokemonSelectInventory.get((Player)args.getOne("player").get()), SealBuilder.instance);
+                InventoryUtils.openInventory(player, PokemonSelectInventory.get(player, (Player)args.getOne("player").get()), SealBuilder.instance);
             } else {
                 src.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.nopermission")));
             }
         } else {
-            InventoryUtils.openInventory(player, PokemonSelectInventory.get(player), SealBuilder.instance);
+            InventoryUtils.openInventory(player, PokemonSelectInventory.get(player, player), SealBuilder.instance);
         }
 
         return CommandResult.success();
