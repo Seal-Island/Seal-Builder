@@ -89,7 +89,6 @@ public class TextUtils {
         StringBuilder blacklist = new StringBuilder();
         List<String> blacklisted = ConfigUtils.getBlacklistedModifiers(specie);
         if(!blacklisted.isEmpty()) {
-            blacklist.append(LangConfig.get("menu.create.blacklistwarn"));
             blacklisted.forEach(modifier -> {
                 blacklist.append("\n").append(modifier);
             });

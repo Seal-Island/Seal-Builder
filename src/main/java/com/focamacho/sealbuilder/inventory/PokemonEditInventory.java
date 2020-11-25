@@ -81,7 +81,7 @@ public class PokemonEditInventory {
         }).build(28, growth));
 
         //Liberar Habilidade Oculta
-        boolean hasHiddenAbility = pokemon.getBaseStats().abilities.length == 3 && pokemon.getBaseStats().abilities[2] != null;
+        boolean hasHiddenAbility = pokemon.getBaseStats().abilities.length == 3 && pokemon.getBaseStats().abilities[2] != null && !pokemon.getBaseStats().abilities[0].equals(pokemon.getBaseStats().abilities[2]);
         boolean isHiddenAbility = !(pokemon.getAbilitySlot() < 2 && hasHiddenAbility);
         ItemStack hiddenAbility = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.hiddenAbilityIcon)).add(Keys.ITEM_ENCHANTMENTS, isHiddenAbility ? Collections.singletonList(Enchantment.builder().type(EnchantmentTypes.UNBREAKING).level(1).build()) : Collections.emptyList()).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.edit.hiddenability.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(hasHiddenAbility ? isHiddenAbility ? LangConfig.get("menu.edit.hiddenability.your") : LangConfig.get("menu.edit.hiddenability.lore") : LangConfig.get("menu.edit.hiddenability.none"), pokemon, target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).add(Keys.HIDE_ENCHANTMENTS, true).build();
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click ->  {

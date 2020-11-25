@@ -195,9 +195,9 @@ public class ConfigUtils {
         List<String> blacklisted = new ArrayList<>();
 
         for (String modifier : modifiers) {
-            if(isBlacklisted(species, modifier)) blacklisted.add(LangConfig.get("modifiers." + modifier));
-            if(!blacklisted.contains(LangConfig.get("modifiers." + modifier))) {
-                if(isModifierDisabled(modifier)) blacklisted.add(LangConfig.get("modifiers." + modifier));
+            if(isBlacklisted(species, modifier)) blacklisted.add(LangConfig.get("modifier." + modifier));
+            if(!blacklisted.contains(LangConfig.get("modifier." + modifier))) {
+                if(isModifierDisabled(modifier)) blacklisted.add(LangConfig.get("modifier." + modifier));
             }
         }
 
