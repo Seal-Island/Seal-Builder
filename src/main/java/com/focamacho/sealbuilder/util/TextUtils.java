@@ -19,7 +19,7 @@ import java.util.List;
 
 public class TextUtils {
 
-    private static DecimalFormat ivPercentageFormat = new DecimalFormat("#0.##");
+    private static final DecimalFormat ivPercentageFormat = new DecimalFormat("#0.##");
 
     public static Text getFormattedText(String text) {
         return Text.of("§r" + text.replace("&", "§"));
@@ -89,9 +89,7 @@ public class TextUtils {
         StringBuilder blacklist = new StringBuilder();
         List<String> blacklisted = ConfigUtils.getBlacklistedModifiers(specie);
         if(!blacklisted.isEmpty()) {
-            blacklisted.forEach(modifier -> {
-                blacklist.append("\n").append(modifier);
-            });
+            blacklisted.forEach(modifier -> blacklist.append("\n").append(modifier));
         }
         return blacklist.toString();
     }

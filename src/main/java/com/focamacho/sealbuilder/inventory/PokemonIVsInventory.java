@@ -134,7 +134,7 @@ public class PokemonIVsInventory {
             }
         }).build(38, max));
 
-        return menu.build(SealBuilder.instance);
+        return menu.build();
     }
 
     private static void handleStatsChange(int index, Pokemon pokemon, Player player, Currency currency, double price, int quantity) {
@@ -227,7 +227,7 @@ public class PokemonIVsInventory {
     }
 
     private static MenuBuilder getBase() {
-        MenuBuilder builder = new MenuBuilder()
+        MenuBuilder builder = MenuBuilder.create(SealBuilder.instance)
                 .setRows(6)
                 .setTitle(LangConfig.get("menu.ivs.title"));
 

@@ -54,7 +54,7 @@ public class PokemonCreateInventory {
         ItemStack confirmItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.confirmItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(confirmItemName, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(confirmItemLore, pokemon, player)).build();
 
         menu.addClickableItem(new ClickableItem.Builder().build(13, pokemonItem));
-        menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.closePlayerInventory((Player) click.getSource(), SealBuilder.instance)).build(10, cancelItem));
+        menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.closeInventory((Player) click.getSource(), SealBuilder.instance)).build(10, cancelItem));
         menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
             Player source = (Player) click.getSource();
 
@@ -69,10 +69,10 @@ public class PokemonCreateInventory {
             } else {
                 source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));
             }
-            InventoryUtils.closePlayerInventory(source, SealBuilder.instance);
+            InventoryUtils.closeInventory(source, SealBuilder.instance);
         }).build(16, confirmItem));
 
-        return menu.build(SealBuilder.instance);
+        return menu.build();
     }
 
     private static String getFormattedCurrency(String text, Currency currency, double price) {
@@ -92,7 +92,7 @@ public class PokemonCreateInventory {
     }
 
     private static MenuBuilder getBase() {
-        MenuBuilder builder = new MenuBuilder()
+        MenuBuilder builder = MenuBuilder.create(SealBuilder.instance)
                 .setRows(3)
                 .setTitle(LangConfig.get("menu.create.title"));
 

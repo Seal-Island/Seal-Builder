@@ -38,7 +38,7 @@ public class PokemonSelectInventory {
 
         MenuBuilder menu = base.copy();
 
-        boolean canCreatePokemon = PluginConfig.createPokemon && target.hasPermission(PluginConfig.createPokemonPermission);
+        boolean canCreatePokemon = target.hasPermission("sealbuilder.create");
         ItemStack noPokemonItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.noPokemonItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(canCreatePokemon ? LangConfig.get("menu.main.create") : LangConfig.get("menu.main.nopokemon"), target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
 
         for(int i = 0; i < basePokemonSlots.length; i++) {
@@ -55,17 +55,17 @@ public class PokemonSelectInventory {
                         source.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.create"), source));
                         CreatePokemonListener.players.put(source.getUniqueId(), target);
                         Task.builder().delay(2, TimeUnit.MINUTES).execute(() -> CreatePokemonListener.players.remove(source.getUniqueId())).submit(SealBuilder.instance);
-                        InventoryUtils.closePlayerInventory(source, SealBuilder.instance);
+                        InventoryUtils.closeInventory(source, SealBuilder.instance);
                     }
                 }).build(basePokemonSlots[i], noPokemonItem));
             }
         }
 
-        return menu.build(SealBuilder.instance);
+        return menu.build();
     }
 
     private static MenuBuilder getBase() {
-        MenuBuilder builder = new MenuBuilder()
+        MenuBuilder builder = MenuBuilder.create(SealBuilder.instance)
                 .setRows(4)
                 .setTitle(LangConfig.get("menu.main.title"));
 

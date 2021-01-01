@@ -141,11 +141,11 @@ public class PokemonEditInventory {
             } else InventoryUtils.openInventory(player, PokemonIVsInventory.get(pokemon, target), SealBuilder.instance);
         }).build(16, ivs));
 
-        return menu.build(SealBuilder.instance);
+        return menu.build();
     }
 
     private static MenuBuilder getBase() {
-        MenuBuilder builder = new MenuBuilder()
+        MenuBuilder builder = MenuBuilder.create(SealBuilder.instance)
                 .setRows(5)
                 .setTitle(LangConfig.get("menu.edit.title"));
 

@@ -111,7 +111,7 @@ public class PokemonGrowthInventory {
         ItemStack ginormous = ItemStack.builder().fromContainer(potionContainer.set(DataQuery.of("UnsafeData" , "Potion"), "minecraft:night_vision")).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("growth.ginormous"), currency, price), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(pokemon.getGrowth() == growth ? LangConfig.get("menu.growth.your") : LangConfig.get("menu.growth.lore"), currency, price), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
         addGrowthToMenu(menu, growth, pokemon, currency, price, 32, ginormous);
 
-        return menu.build(SealBuilder.instance);
+        return menu.build();
     }
 
     private static void addGrowthToMenu(MenuBuilder menu, EnumGrowth growth, Pokemon pokemon, Currency currency, double price, int slot, ItemStack stack) {
@@ -132,7 +132,7 @@ public class PokemonGrowthInventory {
         } else {
             source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));
         }
-        InventoryUtils.closePlayerInventory(source, SealBuilder.instance);
+        InventoryUtils.closeInventory(source, SealBuilder.instance);
     }
 
     private static String getFormattedCurrency(String text, Currency currency, double price) {
@@ -152,7 +152,7 @@ public class PokemonGrowthInventory {
     }
 
     private static MenuBuilder getBase() {
-        MenuBuilder builder = new MenuBuilder()
+        MenuBuilder builder = MenuBuilder.create(SealBuilder.instance)
                 .setRows(5)
                 .setTitle(LangConfig.get("menu.growth.title"));
 

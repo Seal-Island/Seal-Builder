@@ -2,6 +2,7 @@ package com.focamacho.sealbuilder.command;
 
 import com.focamacho.sealbuilder.SealBuilder;
 import com.focamacho.sealbuilder.config.LangConfig;
+import com.focamacho.sealbuilder.config.PluginConfig;
 import com.focamacho.sealbuilder.inventory.PokemonSelectInventory;
 import com.focamacho.sealbuilder.util.TextUtils;
 import com.focamacho.seallibrary.util.InventoryUtils;

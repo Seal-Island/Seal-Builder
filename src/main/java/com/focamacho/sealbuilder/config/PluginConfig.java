@@ -6,9 +6,6 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 @ConfigSerializable
 public class PluginConfig {
 
-    @Setting(comment = "Permite a criação/compra de pokémons.")
-    public static boolean createPokemon = true;
-
     @Setting(comment = "Preço padrão para a criação/compra de um pokémon normal.")
     public static double normalPokemonPrice = 1000.00;
 
@@ -17,9 +14,6 @@ public class PluginConfig {
 
     @Setting(comment = "Item que aparece no menu principal quando não há pokémons no slot.")
     public static String noPokemonItem = "pixelmon:master_ball";
-
-    @Setting(comment = "Permissão necessária para criar um pokémon. Deixe em branco para não precisar de permissão.")
-    public static String createPokemonPermission = "";
 
     @Setting(comment = "Item usado como botão cancelar em menus de confirmação.")
     public static String cancelItem = "pixelmon:red_apricorn";
@@ -98,5 +92,8 @@ public class PluginConfig {
 
     @Setting(comment = "Preço de cada ponto ao escolher usar a opção de aumentar o IV ao máximo.")
     public static double ivMaxPrice = 250.00;
+
+    //@Setting(comment = "Idioma das mensagens padrões. Opções disponíveis: pt_BR, en_US. Delete o arquivo de idioma após modificar essa configuração.")
+    //public static String defaultLang = "en_US";
 
 }

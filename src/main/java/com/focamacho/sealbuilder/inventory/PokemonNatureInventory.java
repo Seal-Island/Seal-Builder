@@ -82,12 +82,12 @@ public class PokemonNatureInventory {
                     } else {
                         source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));
                     }
-                    InventoryUtils.closePlayerInventory(source, SealBuilder.instance);
+                    InventoryUtils.closeInventory(source, SealBuilder.instance);
                 }).build(12 + 9 * row + column, stack));
             }
         }
 
-        return menu.build(SealBuilder.instance);
+        return menu.build();
     }
 
     private static EnumNature getNatureByStats(StatsType increased, StatsType decreased, int neutralIndex) {
@@ -114,7 +114,7 @@ public class PokemonNatureInventory {
     }
 
     private static MenuBuilder getBase() {
-        MenuBuilder builder = new MenuBuilder()
+        MenuBuilder builder = MenuBuilder.create(SealBuilder.instance)
                 .setRows(6)
                 .setTitle(LangConfig.get("menu.nature.title"));
 
