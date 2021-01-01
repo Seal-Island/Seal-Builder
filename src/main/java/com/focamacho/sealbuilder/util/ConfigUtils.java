@@ -65,7 +65,7 @@ public class ConfigUtils {
                     }
                 }
                 if (OverridesConfig.pokeballPriceOverridesGlobal.containsKey(pokeball)) {
-                    return MoneyUtils.getCurrencyByIdOrDefault(OverridesConfig.naturePriceOverridesGlobal.get(pokeball).getKey());
+                    return MoneyUtils.getCurrencyByIdOrDefault(OverridesConfig.pokeballPriceOverridesGlobal.get(pokeball).getKey());
                 }
                 break;
             case "growth":
@@ -139,7 +139,7 @@ public class ConfigUtils {
                     }
                 }
                 if (OverridesConfig.pokeballPriceOverridesGlobal.containsKey(pokeball)) {
-                    return OverridesConfig.naturePriceOverridesGlobal.get(pokeball).getValue();
+                    return OverridesConfig.pokeballPriceOverridesGlobal.get(pokeball).getValue();
                 }
                 break;
             case "growth":

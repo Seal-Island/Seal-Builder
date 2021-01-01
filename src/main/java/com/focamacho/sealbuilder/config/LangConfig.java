@@ -3,7 +3,6 @@ package com.focamacho.sealbuilder.config;
 import com.focamacho.sealbuilder.SealBuilder;
 import com.focamacho.sealbuilder.util.Paths;
 import com.focamacho.seallibrary.util.JsonHandler;
-import org.json.JSONObject;
 import org.spongepowered.api.item.inventory.Inventory;
 
 import java.io.File;
@@ -17,7 +16,7 @@ public class LangConfig {
 
     public static void initLang() throws IOException {
         File jsonFile = new File(Paths.langFile);
-        JSONObject json = JsonHandler.getOrCreateJson(jsonFile);
+        JsonHandler.getOrCreateJson(jsonFile);
         Map<String, String> defaultMessages = getDefaultMessages();
 
         defaultMessages.forEach((key, message) -> {
