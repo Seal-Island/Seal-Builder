@@ -1,11 +1,11 @@
 package com.focamacho.sealbuilder.listener;
 
 import com.focamacho.sealbuilder.SealBuilder;
-import com.focamacho.sealbuilder.config.LangConfig;
+import com.focamacho.sealbuilder.config.SealBuilderLang;
 import com.focamacho.sealbuilder.inventory.PokemonCreateInventory;
 import com.focamacho.sealbuilder.util.ConfigUtils;
 import com.focamacho.sealbuilder.util.TextUtils;
-import com.focamacho.seallibrary.util.InventoryUtils;
+import com.focamacho.seallibrary.sponge.util.InventoryUtils;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
@@ -36,12 +36,12 @@ public class CreatePokemonListener {
                     EnumSpecies specie = EnumSpecies.getFromNameAnyCase(event.getRawMessage().toPlain());
 
                     if(ConfigUtils.isBlacklisted(specie, "create")) {
-                        player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.create.blacklist"), player));
+                        player.sendMessage(TextUtils.getFormattedText(SealBuilderLang.getLang("chat.prefix") + SealBuilderLang.getLang("chat.create.blacklist"), player));
                         return;
                     }
 
                     if(specie == null) {
-                        player.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.nopokemon"), player));
+                        player.sendMessage(TextUtils.getFormattedText(SealBuilderLang.getLang("chat.prefix") + SealBuilderLang.getLang("chat.nopokemon"), player));
                         return;
                     }
 

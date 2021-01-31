@@ -1,17 +1,16 @@
 package com.focamacho.sealbuilder.inventory;
 
 import com.focamacho.sealbuilder.SealBuilder;
-import com.focamacho.sealbuilder.config.LangConfig;
-import com.focamacho.sealbuilder.config.PluginConfig;
+import com.focamacho.sealbuilder.config.SealBuilderLang;
 import com.focamacho.sealbuilder.util.ConfigUtils;
 import com.focamacho.sealbuilder.util.PokemonUtils;
 import com.focamacho.sealbuilder.util.TextUtils;
-import com.focamacho.seallibrary.menu.ClickableItem;
-import com.focamacho.seallibrary.menu.MenuBuilder;
-import com.focamacho.seallibrary.util.InventoryUtils;
-import com.focamacho.seallibrary.util.ItemStackUtils;
-import com.focamacho.seallibrary.util.MoneyUtils;
-import com.focamacho.seallibrary.util.Utils;
+import com.focamacho.seallibrary.common.util.Utils;
+import com.focamacho.seallibrary.sponge.menu.Menu;
+import com.focamacho.seallibrary.sponge.menu.item.ClickableItem;
+import com.focamacho.seallibrary.sponge.util.InventoryUtils;
+import com.focamacho.seallibrary.sponge.util.ItemStackUtils;
+import com.focamacho.seallibrary.sponge.util.MoneyUtils;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import com.pixelmonmod.pixelmon.enums.EnumNature;
@@ -29,19 +28,21 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.focamacho.sealbuilder.SealBuilder.config;
+
 public class PokemonNatureInventory {
 
-    private static final MenuBuilder base = getBase();
+    private static final Menu base = getBase();
 
     public static Inventory get(Pokemon pokemon, Player player) {
-        MenuBuilder menu = base.copy();
+        Menu menu = base.copy();
 
         //Retornar ao Menu de Edição
-        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, player)).build();
-        menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
+        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(SealBuilderLang.getLang("menu.main.pokemon.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(SealBuilderLang.getLang("menu.main.pokemon.lore"), pokemon, player)).build();
+        menu.addMenuItem(ClickableItem.create(1, pokemonItem).setOnPrimary(click -> {
             Player player2 = (Player) click.getSource();
             InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon, player2), SealBuilder.instance);
-        }).build(1, pokemonItem));
+        }));
 
         StatsType[] types = {StatsType.Attack, StatsType.Defence, StatsType.SpecialAttack, StatsType.SpecialDefence, StatsType.Speed};
         ItemStack[] icons = {ItemStackUtils.getStackFromID("pixelmon:pink_clock"), ItemStackUtils.getStackFromID("pixelmon:blue_clock"), ItemStackUtils.getStackFromID("pixelmon:orange_clock"), ItemStackUtils.getStackFromID("pixelmon:green_clock"), ItemStackUtils.getStackFromID("pixelmon:cyan_clock")};
@@ -61,14 +62,14 @@ public class PokemonNatureInventory {
                 String name = nature.getLocalizedName();
                 String lore;
 
-                if(nature == pokemon.getNature()) lore = LangConfig.get("menu.nature.your");
-                else if(column == row) lore = LangConfig.get("menu.nature.neutral");
-                else lore = LangConfig.get("menu.nature.lore");
+                if(nature == pokemon.getNature()) lore = SealBuilderLang.getLang("menu.nature.your");
+                else if(column == row) lore = SealBuilderLang.getLang("menu.nature.neutral");
+                else lore = SealBuilderLang.getLang("menu.nature.lore");
 
-                lore = getFormattedCurrency(lore.replace("%plusstats%", LangConfig.get("statstype." + types[column].name().toLowerCase())).replace("%minusstats%", LangConfig.get("statstype." + types[row].name().toLowerCase())), currency, price);
+                lore = getFormattedCurrency(lore.replace("%plusstats%", SealBuilderLang.getLang("statstype." + types[column].name().toLowerCase())).replace("%minusstats%", SealBuilderLang.getLang("statstype." + types[row].name().toLowerCase())), currency, price);
                 ItemStack stack = ItemStack.builder().fromItemStack(column == row ? neutral : icons[column]).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(name, pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(lore, pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
 
-                menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
+                menu.addMenuItem(ClickableItem.create(12 + 9 * row + column, stack).setOnPrimary(click -> {
                     if(nature == pokemon.getNature()) return;
 
                     Player source = (Player) click.getSource();
@@ -76,18 +77,18 @@ public class PokemonNatureInventory {
                     if(MoneyUtils.hasMoney(source, BigDecimal.valueOf(price), currency)) {
                         pokemon.setNature(nature);
                         MoneyUtils.removeMoney(source, BigDecimal.valueOf(price), currency);
-                        source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.edit.nature"), currency, price)));
+                        source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(SealBuilderLang.getLang("chat.prefix") + SealBuilderLang.getLang("chat.edit.nature"), currency, price)));
                         InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon, source), SealBuilder.instance);
                         return;
                     } else {
-                        source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));
+                        source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(SealBuilderLang.getLang("chat.prefix") + SealBuilderLang.getLang("chat.money.insufficient"), currency, price)));
                     }
                     InventoryUtils.closeInventory(source, SealBuilder.instance);
-                }).build(12 + 9 * row + column, stack));
+                }));
             }
         }
 
-        return menu.build();
+        return menu.get();
     }
 
     private static EnumNature getNatureByStats(StatsType increased, StatsType decreased, int neutralIndex) {
@@ -105,18 +106,18 @@ public class PokemonNatureInventory {
 
     private static Currency getNatureCurrency(EnumSpecies pokemon, EnumNature nature) {
         Currency override = ConfigUtils.getCurrencyOverrides(pokemon, "nature", nature.toString());
-        return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(PluginConfig.currencyId);
+        return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(config.currencyId);
     }
 
     private static double getNaturePrice(EnumSpecies pokemon, EnumNature nature, Player player) {
         Double override = ConfigUtils.getPriceOverrides(pokemon, "nature", nature.toString());
-        return ConfigUtils.applyDiscount(override != null ? override : PluginConfig.naturePrice, player);
+        return ConfigUtils.applyDiscount(override != null ? override : config.naturePrice, player);
     }
 
-    private static MenuBuilder getBase() {
-        MenuBuilder builder = MenuBuilder.create(SealBuilder.instance)
+    private static Menu getBase() {
+        Menu builder = Menu.create(SealBuilder.instance)
                 .setRows(6)
-                .setTitle(LangConfig.get("menu.nature.title"));
+                .setTitle(SealBuilderLang.getLang("menu.nature.title"));
 
         ItemStack whiteGlass = ItemStack.builder().itemType(ItemTypes.STAINED_GLASS_PANE).add(Keys.DISPLAY_NAME, Text.of("")).build();
         ItemStack purpleGlass = ItemStack.builder().fromContainer(ItemTypes.STAINED_GLASS_PANE.getTemplate().toContainer().set(DataQuery.of("UnsafeDamage"), 10)).add(Keys.DISPLAY_NAME, Text.of("")).build();
@@ -124,13 +125,13 @@ public class PokemonNatureInventory {
         List<Integer> purpleGlassSlots = Arrays.asList(10, 19, 28, 37, 46);
         List<Integer> whiteGlassSlots = Arrays.asList(0, 2, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 53);
 
-        ItemStack[] icons = { ItemStackUtils.getStackFromID(PluginConfig.attackIcon), ItemStackUtils.getStackFromID(PluginConfig.defenceIcon), ItemStackUtils.getStackFromID(PluginConfig.spAttackIcon), ItemStackUtils.getStackFromID(PluginConfig.spDefenceIcon), ItemStackUtils.getStackFromID(PluginConfig.speedIcon) };
+        ItemStack[] icons = { ItemStackUtils.getStackFromID(config.attackIcon), ItemStackUtils.getStackFromID(config.defenceIcon), ItemStackUtils.getStackFromID(config.spAttackIcon), ItemStackUtils.getStackFromID(config.spDefenceIcon), ItemStackUtils.getStackFromID(config.speedIcon) };
 
         for (int i = 0; i < 54; i++) {
             if (purpleGlassSlots.contains(i)) {
-                builder.addClickableItem(new ClickableItem.Builder().build(i, purpleGlass.copy()));
+                builder.addMenuItem(ClickableItem.create(i, purpleGlass.copy()));
             } else if(whiteGlassSlots.contains(i)){
-                builder.addClickableItem(new ClickableItem.Builder().build(i, whiteGlass.copy()));
+                builder.addMenuItem(ClickableItem.create(i, whiteGlass.copy()));
             }
         }
 
@@ -139,10 +140,10 @@ public class PokemonNatureInventory {
         String[] keys = {"attack", "defence", "spattack", "spdefence", "speed"};
 
         for(int i = 0; i < 5; i++) {
-            ItemStack plusStack = ItemStack.builder().from(icons[i]).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.nature." + keys[i] + ".plus"))).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
-            ItemStack minusStack = ItemStack.builder().from(icons[i]).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.nature." + keys[i] + ".minus"))).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
-            builder.addClickableItem(new ClickableItem.Builder().build(columnSlots[i], plusStack));
-            builder.addClickableItem(new ClickableItem.Builder().build(rowSlots[i], minusStack));
+            ItemStack plusStack = ItemStack.builder().from(icons[i]).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(SealBuilderLang.getLang("menu.nature." + keys[i] + ".plus"))).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+            ItemStack minusStack = ItemStack.builder().from(icons[i]).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(SealBuilderLang.getLang("menu.nature." + keys[i] + ".minus"))).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+            builder.addMenuItem(ClickableItem.create(columnSlots[i], plusStack));
+            builder.addMenuItem(ClickableItem.create(rowSlots[i], minusStack));
         }
 
         return builder;

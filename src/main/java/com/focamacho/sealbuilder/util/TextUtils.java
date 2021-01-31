@@ -1,6 +1,6 @@
 package com.focamacho.sealbuilder.util;
 
-import com.focamacho.sealbuilder.config.LangConfig;
+import com.focamacho.sealbuilder.config.SealBuilderLang;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.battles.attacks.specialAttacks.basic.HiddenPower;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.EVStore;
@@ -26,7 +26,7 @@ public class TextUtils {
     }
 
     public static Text getFormattedText(String text, Player player) {
-        return getFormattedText(text.replace("%discountlore%", player.getOption("sealbuilder.discount").isPresent() ? LangConfig.get("discount.applied").replace("%discount%", player.getOption("sealbuilder.discount").get() + "%") : ("")));
+        return getFormattedText(text.replace("%discountlore%", player.getOption("sealbuilder.discount").isPresent() ? SealBuilderLang.getLang("discount.applied").replace("%discount%", player.getOption("sealbuilder.discount").get() + "%") : ("")));
     }
 
     public static Text getFormattedText(String text, Pokemon pokemon, Player player) {
@@ -49,16 +49,16 @@ public class TextUtils {
 
         String pokemonPlaceholders = text.replace("%pokemonname%", pokemon.getSpecies().getPokemonName())
                 .replace("%pokemonlvl%", "" + pokemon.getLevel())
-                .replace("%pokemonshiny%", pokemon.isShiny() ? LangConfig.get("yes") : LangConfig.get("no"))
-                .replace("%pokemongender%", LangConfig.get("gender." + pokemon.getGender().name().toLowerCase()))
+                .replace("%pokemonshiny%", pokemon.isShiny() ? SealBuilderLang.getLang("yes") : SealBuilderLang.getLang("no"))
+                .replace("%pokemongender%", SealBuilderLang.getLang("gender." + pokemon.getGender().name().toLowerCase()))
                 .replace("%pokemonball%", pokemon.getCaughtBall().name())
                 .replace("%pokemonability%", pokemon.getAbilityName())
-                .replace("%pokemonsize%", LangConfig.get("growth." + pokemon.getGrowth().name().toLowerCase()))
+                .replace("%pokemonsize%", SealBuilderLang.getLang("growth." + pokemon.getGrowth().name().toLowerCase()))
                 .replace("%pokemonnature%", nature.getName())
-                .replace("%pokemonnatureinc%", LangConfig.get("statstype." + nature.increasedStat.name().toLowerCase()))
-                .replace("%pokemonnaturedec%", LangConfig.get("statstype." + nature.decreasedStat.name().toLowerCase()))
-                .replace("%pokemonnatureincc%", LangConfig.get("statstype." + nature.increasedStat.name().toLowerCase() + ".compact"))
-                .replace("%pokemonnaturedecc%", LangConfig.get("statstype." + nature.decreasedStat.name().toLowerCase() + ".compact"))
+                .replace("%pokemonnatureinc%", SealBuilderLang.getLang("statstype." + nature.increasedStat.name().toLowerCase()))
+                .replace("%pokemonnaturedec%", SealBuilderLang.getLang("statstype." + nature.decreasedStat.name().toLowerCase()))
+                .replace("%pokemonnatureincc%", SealBuilderLang.getLang("statstype." + nature.increasedStat.name().toLowerCase() + ".compact"))
+                .replace("%pokemonnaturedecc%", SealBuilderLang.getLang("statstype." + nature.decreasedStat.name().toLowerCase() + ".compact"))
                 .replace("%pokemonhappiness%", "" + pokemon.getFriendship())
                 .replace("%pokemonhiddenpower%", HiddenPower.getHiddenPowerType(pokemon.getIVs()).getLocalizedName())
                 .replace("%pokemonivsum%", "" + ivSum)
@@ -75,10 +75,10 @@ public class TextUtils {
                 .replace("%pokemonevspa%", evStore != null ? "" + evStore.specialAttack : "0")
                 .replace("%pokemonevspd%", evStore != null ? "" + evStore.specialDefence : "0")
                 .replace("%pokemonevspe%", evStore != null ? "" + evStore.speed : "0")
-                .replace("%pokemonmoveone%", moveset.get(0) == null ? LangConfig.get("none") : moveset.get(0).getActualMove().getLocalizedName())
-                .replace("%pokemonmovetwo%", moveset.get(1) == null ? LangConfig.get("none") : moveset.get(1).getActualMove().getLocalizedName())
-                .replace("%pokemonmovethree%", moveset.get(2) == null ? LangConfig.get("none") : moveset.get(2).getActualMove().getLocalizedName())
-                .replace("%pokemonmovefour%", moveset.get(3) == null ? LangConfig.get("none") : moveset.get(3).getActualMove().getLocalizedName())
+                .replace("%pokemonmoveone%", moveset.get(0) == null ? SealBuilderLang.getLang("none") : moveset.get(0).getActualMove().getLocalizedName())
+                .replace("%pokemonmovetwo%", moveset.get(1) == null ? SealBuilderLang.getLang("none") : moveset.get(1).getActualMove().getLocalizedName())
+                .replace("%pokemonmovethree%", moveset.get(2) == null ? SealBuilderLang.getLang("none") : moveset.get(2).getActualMove().getLocalizedName())
+                .replace("%pokemonmovefour%", moveset.get(3) == null ? SealBuilderLang.getLang("none") : moveset.get(3).getActualMove().getLocalizedName())
                 .replace("%pokemonivpercentage%", ivPercentageFormat.format((int) ((double) ivSum / 186.0 * 100.0)))
                 .replace("%pokemonevpercentage%", ivPercentageFormat.format((int) ((double) evSum / 510.0 * 100.0)));
 
@@ -97,8 +97,8 @@ public class TextUtils {
     public static List<Text> getFormattedLore(String text, Pokemon pokemon, Player player) {
         List<Text> lore = new ArrayList<>();
 
-        text = text.replace("%discountlore%", player.getOption("sealbuilder.discount").isPresent() ? LangConfig.get("discount.applied").replace("%discount%", player.getOption("sealbuilder.discount").get() + "%") : "");
-        text = text.replace("%blacklistwarn%", ConfigUtils.getBlacklistedModifiers(pokemon.getSpecies()).size() > 1 ? LangConfig.get("menu.create.blacklistwarn") : "").replace("%blacklistedmodifiers%", getBlacklistedModifiers(pokemon.getSpecies()));
+        text = text.replace("%discountlore%", player.getOption("sealbuilder.discount").isPresent() ? SealBuilderLang.getLang("discount.applied").replace("%discount%", player.getOption("sealbuilder.discount").get() + "%") : "");
+        text = text.replace("%blacklistwarn%", ConfigUtils.getBlacklistedModifiers(pokemon.getSpecies()).size() > 1 ? SealBuilderLang.getLang("menu.create.blacklistwarn") : "").replace("%blacklistedmodifiers%", getBlacklistedModifiers(pokemon.getSpecies()));
 
         for(String line : text.split("\n")) {
             lore.add(getFormattedText(line, pokemon, player));

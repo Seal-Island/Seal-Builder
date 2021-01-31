@@ -72,7 +72,7 @@ dependencies {
     compileOnly group: 'org.json', name: 'json', version: '20200518'
     compileOnly group: 'commons-io', name: 'commons-io', version: '2.7'
 
-    compile files("../Seal Library/build/libs/Seal Library-1.1.jar")
+    compile files("../Seal Library/build/libs/Seal Library-1.2.jar")
     compile files("libs/Pixelmon-1.12.2-8.1.2-universal.jar")
 
     compile ('org.spongepowered:spongecommon:7.0.0-SNAPSHOT:dev') {

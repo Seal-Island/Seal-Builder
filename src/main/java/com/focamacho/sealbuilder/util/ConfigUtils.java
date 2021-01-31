@@ -1,7 +1,7 @@
 package com.focamacho.sealbuilder.util;
 
-import com.focamacho.sealbuilder.config.LangConfig;
 import com.focamacho.sealbuilder.config.OverridesConfig;
+import com.focamacho.sealbuilder.config.SealBuilderLang;
 import com.focamacho.sealbuilder.config.lib.OverrideGrowth;
 import com.focamacho.sealbuilder.config.lib.OverrideNature;
 import com.focamacho.sealbuilder.config.lib.OverridePokeball;
@@ -195,9 +195,9 @@ public class ConfigUtils {
         List<String> blacklisted = new ArrayList<>();
 
         for (String modifier : modifiers) {
-            if(isBlacklisted(species, modifier)) blacklisted.add(LangConfig.get("modifier." + modifier));
-            if(!blacklisted.contains(LangConfig.get("modifier." + modifier))) {
-                if(isModifierDisabled(modifier)) blacklisted.add(LangConfig.get("modifier." + modifier));
+            if(isBlacklisted(species, modifier)) blacklisted.add(SealBuilderLang.getLang("modifier." + modifier));
+            if(!blacklisted.contains(SealBuilderLang.getLang("modifier." + modifier))) {
+                if(isModifierDisabled(modifier)) blacklisted.add(SealBuilderLang.getLang("modifier." + modifier));
             }
         }
 

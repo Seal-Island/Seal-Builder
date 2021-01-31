@@ -1,10 +1,10 @@
 package com.focamacho.sealbuilder.command;
 
 import com.focamacho.sealbuilder.SealBuilder;
-import com.focamacho.sealbuilder.config.LangConfig;
+import com.focamacho.sealbuilder.config.SealBuilderLang;
 import com.focamacho.sealbuilder.inventory.PokemonSelectInventory;
 import com.focamacho.sealbuilder.util.TextUtils;
-import com.focamacho.seallibrary.util.InventoryUtils;
+import com.focamacho.seallibrary.sponge.util.InventoryUtils;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -16,7 +16,7 @@ public class BuilderCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) {
         if(!(src instanceof Player)) {
-            src.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.onlyplayer")));
+            src.sendMessage(TextUtils.getFormattedText(SealBuilderLang.getLang("chat.onlyplayer")));
             return CommandResult.success();
         }
 
@@ -26,7 +26,7 @@ public class BuilderCommand implements CommandExecutor {
             if(src.hasPermission("sealbuilder.admin")) {
                 InventoryUtils.openInventory(player, PokemonSelectInventory.get(player, (Player)args.getOne("player").get()), SealBuilder.instance);
             } else {
-                src.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.nopermission")));
+                src.sendMessage(TextUtils.getFormattedText(SealBuilderLang.getLang("chat.nopermission")));
             }
         } else {
             InventoryUtils.openInventory(player, PokemonSelectInventory.get(player, player), SealBuilder.instance);

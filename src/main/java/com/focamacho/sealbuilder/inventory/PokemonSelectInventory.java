@@ -1,15 +1,14 @@
 package com.focamacho.sealbuilder.inventory;
 
 import com.focamacho.sealbuilder.SealBuilder;
-import com.focamacho.sealbuilder.config.LangConfig;
-import com.focamacho.sealbuilder.config.PluginConfig;
+import com.focamacho.sealbuilder.config.SealBuilderLang;
 import com.focamacho.sealbuilder.listener.CreatePokemonListener;
 import com.focamacho.sealbuilder.util.PokemonUtils;
 import com.focamacho.sealbuilder.util.TextUtils;
-import com.focamacho.seallibrary.menu.ClickableItem;
-import com.focamacho.seallibrary.menu.MenuBuilder;
-import com.focamacho.seallibrary.util.InventoryUtils;
-import com.focamacho.seallibrary.util.ItemStackUtils;
+import com.focamacho.seallibrary.sponge.menu.Menu;
+import com.focamacho.seallibrary.sponge.menu.item.ClickableItem;
+import com.focamacho.seallibrary.sponge.util.InventoryUtils;
+import com.focamacho.seallibrary.sponge.util.ItemStackUtils;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
@@ -27,47 +26,49 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.focamacho.sealbuilder.SealBuilder.config;
+
 public class PokemonSelectInventory {
 
-    private static final MenuBuilder base = getBase();
+    private static final Menu base = getBase();
     private static final int[] basePokemonSlots = new int[]{12, 13, 14, 21, 22, 23};
 
     public static Inventory get(Player player, Player target) {
         EntityPlayerMP playerMP = (EntityPlayerMP) target;
         PlayerPartyStorage party = Pixelmon.storageManager.getParty(playerMP);
 
-        MenuBuilder menu = base.copy();
+        Menu menu = base.copy();
 
         boolean canCreatePokemon = target.hasPermission("sealbuilder.create");
-        ItemStack noPokemonItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(PluginConfig.noPokemonItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(canCreatePokemon ? LangConfig.get("menu.main.create") : LangConfig.get("menu.main.nopokemon"), target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+        ItemStack noPokemonItem = ItemStack.builder().fromItemStack(ItemStackUtils.getStackFromID(config.noPokemonItem)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(canCreatePokemon ? SealBuilderLang.getLang("menu.main.create") : SealBuilderLang.getLang("menu.main.nopokemon"), target)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
 
         for(int i = 0; i < basePokemonSlots.length; i++) {
             Pokemon pokemon = party.get(i);
 
             if(pokemon != null) {
-                ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, target)).build();
-                menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> InventoryUtils.openInventory(player, PokemonEditInventory.get(pokemon, target), SealBuilder.instance)).build(basePokemonSlots[i], pokemonItem));
+                ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(SealBuilderLang.getLang("menu.main.pokemon.name"), pokemon, target)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(SealBuilderLang.getLang("menu.main.pokemon.lore"), pokemon, target)).build();
+                menu.addMenuItem(ClickableItem.create(basePokemonSlots[i], pokemonItem).setOnPrimary(click -> InventoryUtils.openInventory(player, PokemonEditInventory.get(pokemon, target), SealBuilder.instance)));
             } else {
-                menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
+                menu.addMenuItem(ClickableItem.create(basePokemonSlots[i], noPokemonItem).setOnPrimary(click -> {
                     //Criar pokémon
                     if(canCreatePokemon) {
                         Player source = (Player) click.getSource();
-                        source.sendMessage(TextUtils.getFormattedText(LangConfig.get("chat.prefix") + LangConfig.get("chat.create"), source));
+                        source.sendMessage(TextUtils.getFormattedText(SealBuilderLang.getLang("chat.prefix") + SealBuilderLang.getLang("chat.create"), source));
                         CreatePokemonListener.players.put(source.getUniqueId(), target);
                         Task.builder().delay(2, TimeUnit.MINUTES).execute(() -> CreatePokemonListener.players.remove(source.getUniqueId())).submit(SealBuilder.instance);
                         InventoryUtils.closeInventory(source, SealBuilder.instance);
                     }
-                }).build(basePokemonSlots[i], noPokemonItem));
+                }));
             }
         }
 
-        return menu.build();
+        return menu.get();
     }
 
-    private static MenuBuilder getBase() {
-        MenuBuilder builder = MenuBuilder.create(SealBuilder.instance)
+    private static Menu getBase() {
+        Menu builder = Menu.create(SealBuilder.instance)
                 .setRows(4)
-                .setTitle(LangConfig.get("menu.main.title"));
+                .setTitle(SealBuilderLang.getLang("menu.main.title"));
 
         ItemStack whiteGlass = ItemStack.builder().itemType(ItemTypes.STAINED_GLASS_PANE).add(Keys.DISPLAY_NAME, Text.of("")).build();
         ItemStack purpleGlass = ItemStack.builder().fromContainer(ItemTypes.STAINED_GLASS_PANE.getTemplate().toContainer().set(DataQuery.of("UnsafeDamage"), 10)).add(Keys.DISPLAY_NAME, Text.of("")).build();
@@ -76,9 +77,9 @@ public class PokemonSelectInventory {
 
         for(int i = 0; i < 36; i++) {
             if(whiteGlassSlots.contains(i)) {
-                builder.addClickableItem(new ClickableItem.Builder().build(i, whiteGlass.copy()));
+                builder.addMenuItem(ClickableItem.create(i, whiteGlass.copy()));
             } else {
-                builder.addClickableItem(new ClickableItem.Builder().build(i, purpleGlass.copy()));
+                builder.addMenuItem(ClickableItem.create(i, purpleGlass.copy()));
             }
         }
 

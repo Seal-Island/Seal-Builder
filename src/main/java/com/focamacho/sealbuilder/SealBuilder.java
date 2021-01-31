@@ -1,25 +1,20 @@
 package com.focamacho.sealbuilder;
 
 import com.focamacho.sealbuilder.command.BuilderCommand;
-import com.focamacho.sealbuilder.config.ConfigManager;
-import com.focamacho.sealbuilder.config.LangConfig;
 import com.focamacho.sealbuilder.config.OverridesConfig;
+import com.focamacho.sealbuilder.config.SealBuilderConfig;
+import com.focamacho.sealbuilder.config.SealBuilderLang;
 import com.focamacho.sealbuilder.listener.CreatePokemonListener;
-import com.google.inject.Inject;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
-import org.slf4j.Logger;
+import com.focamacho.seallibrary.common.config.ILangConfig;
+import com.focamacho.seallibrary.common.config.SealConfig;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.text.Text;
 
-import java.nio.file.Path;
+import java.io.File;
 
 @Plugin(
         id = "sealbuilder",
@@ -33,42 +28,29 @@ public class SealBuilder {
 
     public static SealBuilder instance;
 
-    @Inject
-    @DefaultConfig(sharedRoot = false)
-    private Path defaultConfig;
-
-    @Inject
-    @DefaultConfig(sharedRoot = false)
-    private ConfigurationLoader<CommentedConfigurationNode> configManager;
-
-    @Inject
-    private Logger logger;
+    public SealConfig sealConfig;
+    public static SealBuilderConfig config;
+    public static ILangConfig lang;
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
         instance = this;
-        new ConfigManager(configManager);
-        loadLang();
+
+        sealConfig = new SealConfig(new File("./config/SealBuilder/lang/"), new SealBuilderLang());
+        sealConfig.getConfig(new File("./config/SealBuilder/SealBuilder.json"), SealBuilderConfig.class);
+        lang = sealConfig.getLangConfig();
+
         loadOverrides();
 
-        Sponge.getCommandManager().register(this, CommandSpec.builder().arguments(GenericArguments.optional(GenericArguments.player(Text.of("player")))).executor(new BuilderCommand()).build(), "builder");
+        Sponge.getCommandManager().register(this, CommandSpec.builder()./*arguments(GenericArguments.optional(GenericArguments.player(Text.of("player")))).*/executor(new BuilderCommand()).build(), "builder");
 
         Sponge.getEventManager().registerListeners(this, new CreatePokemonListener());
     }
 
     @Listener
     public void onReload(GameReloadEvent event) {
-        ConfigManager.load();
-        loadLang();
+        sealConfig.reload();
         loadOverrides();
-    }
-
-    private void loadLang() {
-        try {
-            LangConfig.initLang();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void loadOverrides() {

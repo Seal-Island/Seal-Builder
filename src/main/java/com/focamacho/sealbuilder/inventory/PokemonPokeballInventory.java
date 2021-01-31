@@ -1,16 +1,15 @@
 package com.focamacho.sealbuilder.inventory;
 
 import com.focamacho.sealbuilder.SealBuilder;
-import com.focamacho.sealbuilder.config.LangConfig;
-import com.focamacho.sealbuilder.config.PluginConfig;
+import com.focamacho.sealbuilder.config.SealBuilderLang;
 import com.focamacho.sealbuilder.util.ConfigUtils;
 import com.focamacho.sealbuilder.util.PokemonUtils;
 import com.focamacho.sealbuilder.util.TextUtils;
-import com.focamacho.seallibrary.menu.ClickableItem;
-import com.focamacho.seallibrary.menu.MenuBuilder;
-import com.focamacho.seallibrary.util.InventoryUtils;
-import com.focamacho.seallibrary.util.MoneyUtils;
-import com.focamacho.seallibrary.util.Utils;
+import com.focamacho.seallibrary.common.util.Utils;
+import com.focamacho.seallibrary.sponge.menu.Menu;
+import com.focamacho.seallibrary.sponge.menu.item.ClickableItem;
+import com.focamacho.seallibrary.sponge.util.InventoryUtils;
+import com.focamacho.seallibrary.sponge.util.MoneyUtils;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import com.pixelmonmod.pixelmon.enums.items.EnumPokeballs;
@@ -28,20 +27,22 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.focamacho.sealbuilder.SealBuilder.config;
+
 public class PokemonPokeballInventory {
 
-    private static final MenuBuilder base = getBase();
+    private static final Menu base = getBase();
     private static final int[] pokeballSlots = new int[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
 
     public static Inventory get(Pokemon pokemon, Player player) {
-        MenuBuilder menu = base.copy();
+        Menu menu = base.copy();
 
         //Retornar ao Menu de Edição
-        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(LangConfig.get("menu.main.pokemon.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(LangConfig.get("menu.main.pokemon.lore"), pokemon, player)).build();
-        menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
+        ItemStack pokemonItem = ItemStack.builder().from(PokemonUtils.getPokemonAsItem(pokemon)).add(Keys.DISPLAY_NAME, TextUtils.getFormattedText(SealBuilderLang.getLang("menu.main.pokemon.name"), pokemon, player)).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(SealBuilderLang.getLang("menu.main.pokemon.lore"), pokemon, player)).build();
+        menu.addMenuItem(ClickableItem.create(4, pokemonItem).setOnPrimary(click -> {
             Player player2 = (Player) click.getSource();
             InventoryUtils.openInventory(player2, PokemonEditInventory.get(pokemon, player2), SealBuilder.instance);
-        }).build(4, pokemonItem));
+        }));
 
         EnumPokeballs[] pokeballs = EnumPokeballs.values();
 
@@ -52,29 +53,29 @@ public class PokemonPokeballInventory {
             double price = getPokeballPrice(pokemon.getSpecies(), pokeball, player);
 
             if(pokeball == pokemon.getCaughtBall()) {
-                ItemStack stack = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokeball.getItem()))).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(LangConfig.get("menu.pokeball.your"), currency, price), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
-                menu.addClickableItem(new ClickableItem.Builder().build(pokeballSlots[i], stack));
+                ItemStack stack = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokeball.getItem()))).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(SealBuilderLang.getLang("menu.pokeball.your"), currency, price), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+                menu.addMenuItem(ClickableItem.create(pokeballSlots[i], stack));
                 continue;
             }
 
-            ItemStack stack = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokeball.getItem()))).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(LangConfig.get("menu.pokeball.lore"), currency, price), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
-            menu.addClickableItem(new ClickableItem.Builder().onPrimary(click -> {
+            ItemStack stack = ItemStack.builder().from(ItemStackUtil.fromNative(new net.minecraft.item.ItemStack(pokeball.getItem()))).add(Keys.ITEM_LORE, TextUtils.getFormattedLore(getFormattedCurrency(SealBuilderLang.getLang("menu.pokeball.lore"), currency, price), pokemon, player)).add(Keys.HIDE_ATTRIBUTES, true).add(Keys.HIDE_MISCELLANEOUS, true).build();
+            menu.addMenuItem(ClickableItem.create(pokeballSlots[i], stack).setOnPrimary(click -> {
                 Player source = (Player) click.getSource();
 
                 if(MoneyUtils.hasMoney(source, BigDecimal.valueOf(price), currency)) {
                     pokemon.setCaughtBall(pokeball);
                     MoneyUtils.removeMoney(source, BigDecimal.valueOf(price), currency);
-                    source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.edit.pokeball"), currency, price)));
+                    source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(SealBuilderLang.getLang("chat.prefix") + SealBuilderLang.getLang("chat.edit.pokeball"), currency, price)));
                     InventoryUtils.openInventory(source, PokemonEditInventory.get(pokemon, source), SealBuilder.instance);
                     return;
                 } else {
-                    source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(LangConfig.get("chat.prefix") + LangConfig.get("chat.money.insufficient"), currency, price)));
+                    source.sendMessage(TextUtils.getFormattedText(getFormattedCurrency(SealBuilderLang.getLang("chat.prefix") + SealBuilderLang.getLang("chat.money.insufficient"), currency, price)));
                 }
                 InventoryUtils.closeInventory(source, SealBuilder.instance);
-            }).build(pokeballSlots[i], stack));
+            }));
         }
 
-        return menu.build();
+        return menu.get();
     }
 
     private static String getFormattedCurrency(String text, Currency currency, double price) {
@@ -85,18 +86,18 @@ public class PokemonPokeballInventory {
 
     private static Currency getPokeballCurrency(EnumSpecies pokemon, EnumPokeballs pokeball) {
         Currency override = ConfigUtils.getCurrencyOverrides(pokemon, "pokeball", pokeball.getFilenamePrefix().toLowerCase());
-        return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(PluginConfig.currencyId);
+        return override != null ? override : MoneyUtils.getCurrencyByIdOrDefault(config.currencyId);
     }
 
     private static double getPokeballPrice(EnumSpecies pokemon, EnumPokeballs pokeball, Player player) {
         Double override = ConfigUtils.getPriceOverrides(pokemon, "pokeball", pokeball.getFilenamePrefix().toLowerCase());
-        return ConfigUtils.applyDiscount(override != null ? override : PluginConfig.pokeballPrice, player);
+        return ConfigUtils.applyDiscount(override != null ? override : config.pokeballPrice, player);
     }
 
-    private static MenuBuilder getBase() {
-        MenuBuilder builder = MenuBuilder.create(SealBuilder.instance)
+    private static Menu getBase() {
+        Menu builder = Menu.create(SealBuilder.instance)
                 .setRows(6)
-                .setTitle(LangConfig.get("menu.pokeball.title"));
+                .setTitle(SealBuilderLang.getLang("menu.pokeball.title"));
 
         ItemStack whiteGlass = ItemStack.builder().itemType(ItemTypes.STAINED_GLASS_PANE).add(Keys.DISPLAY_NAME, Text.of("")).build();
         ItemStack purpleGlass = ItemStack.builder().fromContainer(ItemTypes.STAINED_GLASS_PANE.getTemplate().toContainer().set(DataQuery.of("UnsafeDamage"), 10)).add(Keys.DISPLAY_NAME, Text.of("")).build();
@@ -105,9 +106,9 @@ public class PokemonPokeballInventory {
 
         for (int i = 0; i < 54; i++) {
             if (whiteGlassSlots.contains(i)) {
-                builder.addClickableItem(new ClickableItem.Builder().build(i, whiteGlass.copy()));
+                builder.addMenuItem(ClickableItem.create(i, whiteGlass.copy()));
             } else {
-                builder.addClickableItem(new ClickableItem.Builder().build(i, purpleGlass.copy()));
+                builder.addMenuItem(ClickableItem.create(i, purpleGlass.copy()));
             }
         }
 
