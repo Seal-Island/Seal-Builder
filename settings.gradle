@@ -1,1 +1,3 @@
 rootProject.name = 'Seal Builder'
+
+include 'sealbuilder-common', 'sealbuilder-bukkit', 'sealbuilder-sponge'

@@ -1,87 +1,59 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        mavenCentral()
-        maven {
-            url = 'http://repo.spongepowered.org/maven'
-        }
+        maven { url = 'https://files.minecraftforge.net/maven' }
     }
+
     dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
 
-plugins {
-    id "com.github.johnrengelman.shadow" version "4.0.4"
-}
-
-apply plugin: 'net.minecraftforge.gradle'
-
 group = 'com.focamacho'
 version = '1.0'
-archivesBaseName = 'Seal Builder'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'net.minecraftforge.gradle'
 
-minecraft {
-    mappings channel: 'stable', version: '39-1.12'
+    group = project.group
+    version = project.version
 
-    runs {
-        client {
-            workingDirectory project.file('run')
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+    minecraft {
+        mappings channel: 'stable', version: '39-1.12'
+    }
 
-            property 'forge.logging.console.level', 'debug'
+    repositories {
+        mavenCentral()
+    }
 
-            mods {
-                sealinit {
-                    source sourceSets.main
-                }
-            }
+    dependencies {
+        //Forge
+        minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+
+        //Seal Library Common
+        compileOnly files(project.rootDir.toString() + "/../Plugins/Seal Library/seallibrary-common/build/libs/SealLibrary-Common-1.0.jar")
+
+        //Pixelmon
+        compileOnly files(project.rootDir.toString() + "/libs/Pixelmon-1.12.2-8.1.2-universal.jar")
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding("UTF-8")
+    }
+}
+
+subprojects.each { subproject -> evaluationDependsOn(subproject.path)}
+
+task allJar(type: Jar, dependsOn: subprojects.build) {
+    subprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
         }
-
-        server {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                sealinit {
-                    source sourceSets.main
-                }
-            }
-        }
     }
-}
-
-repositories {
-    mavenCentral()
-    maven {
-        name = 'sponge'
-        url = 'https://repo.spongepowered.org/maven'
-    }
-}
-
-dependencies {
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
-    compileOnly 'org.spongepowered:spongeapi:7.2.0'
-    compileOnly group: 'org.json', name: 'json', version: '20200518'
-    compileOnly group: 'commons-io', name: 'commons-io', version: '2.7'
-
-    compile files("../Seal Library/build/libs/Seal Library-1.2.jar")
-    compile files("libs/Pixelmon-1.12.2-8.1.2-universal.jar")
-
-    compile ('org.spongepowered:spongecommon:7.0.0-SNAPSHOT:dev') {
-        exclude group: 'org.spongepowered', module: 'testplugins'
-    }
-}
-
-jar.finalizedBy('reobfJar')
-
-tasks.withType(JavaCompile) {
-    options.encoding("UTF-8")
 }

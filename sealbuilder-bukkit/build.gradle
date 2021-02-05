@@ -1,0 +1,42 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+    id 'net.minecrell.plugin-yml.bukkit' version '0.3.0'
+}
+
+repositories {
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+}
+
+dependencies {
+    compile project(':sealbuilder-common')
+    compileOnly 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
+    compileOnly group: 'com.github.azbh111', name: 'craftbukkit-1.12.2', version: 'R'
+
+    //Seal Library Bukkit
+    compileOnly files(project.rootDir.toString() + "/../Plugins/Seal Library/seallibrary-bukkit/build/libs/seallibrary-bukkit.jar")
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        expand 'version': project.version
+    }
+}
+
+shadowJar {
+    dependencies {
+        include(dependency(':sealbuilder-common'))
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar
+
+bukkit {
+    main = 'com.focamacho.sealbuilder.SealBuilderBukkit'
+    name = 'sealbuilder'
+    version = rootProject.version
+    description = 'PokeBuilder para Pixelmon Reforged.'
+    author = 'Focamacho'
+}
