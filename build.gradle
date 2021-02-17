@@ -37,7 +37,7 @@ allprojects {
         minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 
         //Seal Library Common
-        compileOnly files(project.rootDir.toString() + "/../Plugins/Seal Library/seallibrary-common/build/libs/SealLibrary-Common-1.0.jar")
+        compileOnly files(project.rootDir.toString() + "/../Seal Library/seallibrary-common/build/libs/SealLibrary-Common-1.0.jar")
 
         //Pixelmon
         compileOnly files(project.rootDir.toString() + "/libs/Pixelmon-1.12.2-8.1.2-universal.jar")

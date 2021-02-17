@@ -1,6 +1,6 @@
 package com.focamacho.sealbuilder.config;
 
-import blue.endless.jankson.Comment;
+import com.focamacho.sealconfig.relocated.blue.endless.jankson.Comment;
 
 public class SealBuilderConfig {
 
