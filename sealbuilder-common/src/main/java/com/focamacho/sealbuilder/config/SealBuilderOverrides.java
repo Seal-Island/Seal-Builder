@@ -25,7 +25,10 @@ public class SealBuilderOverrides {
         blacklist = blacklistExample;
     }
 
-    @Comment("Defina aqui as sobreposições de preços para criação de pokémons específicos.\n" +
+    @Comment("Informação: Acesse https://github.com/Seal-Island/Seal-Builder#configuração para ter algumas informações úteis\n" +
+            "que podem lhe ajudar na configuração dos overrides.\n" +
+            "\n" +
+            "Defina aqui as sobreposições de preços para criação de pokémons específicos.\n" +
             "O formato é:\n" +
             "{\n" +
             "   \"pokemon\": \"nomeDoPokemon\",\n" +
