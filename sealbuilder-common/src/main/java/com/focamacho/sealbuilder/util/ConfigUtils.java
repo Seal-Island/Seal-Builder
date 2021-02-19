@@ -1,89 +1,74 @@
 package com.focamacho.sealbuilder.util;
 
-import com.focamacho.sealbuilder.config.OverridesConfig;
 import com.focamacho.sealbuilder.config.SealBuilderLang;
-import com.focamacho.sealbuilder.config.lib.*;
+import com.focamacho.sealbuilder.config.SealBuilderOverrides;
+import com.focamacho.sealbuilder.config.lib.ModuleTypes;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
-import com.pixelmonmod.pixelmon.enums.EnumGrowth;
-import com.pixelmonmod.pixelmon.enums.EnumNature;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
-import com.pixelmonmod.pixelmon.enums.items.EnumPokeballs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import static com.focamacho.sealbuilder.SealBuilder.overrides;
 
 public class ConfigUtils {
 
     public static String getCurrencyOverrides(EnumSpecies specie, ModuleTypes module, String value) {
         switch(module) {
             case CREATE:
-                if(OverridesConfig.createPriceOverrides.containsKey(specie)) {
-                    return OverridesConfig.createPriceOverrides.get(specie).getKey();
+                for(SealBuilderOverrides.PriceOverride priceOverride : overrides.createPriceOverrides) {
+                    if (priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        return priceOverride.currency;
+                    }
                 }
                 break;
             case SHINY:
-                if(OverridesConfig.shinyPriceOverrides.containsKey(specie)) {
-                    return OverridesConfig.shinyPriceOverrides.get(specie).getKey();
+                for(SealBuilderOverrides.PriceOverride priceOverride : overrides.shinyPriceOverrides) {
+                    if (priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        return priceOverride.currency;
+                    }
                 }
                 break;
             case HIDDEN_ABILITY:
-                if(OverridesConfig.hiddenAbilityPriceOverrides.containsKey(specie)) {
-                    return OverridesConfig.hiddenAbilityPriceOverrides.get(specie).getKey();
+                for(SealBuilderOverrides.PriceOverride priceOverride : overrides.hiddenAbilityPriceOverrides) {
+                    if (priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        return priceOverride.currency;
+                    }
                 }
                 break;
             case GENDER:
-                if(OverridesConfig.genderPriceOverrides.containsKey(specie)) {
-                    return OverridesConfig.genderPriceOverrides.get(specie).getKey();
+                for(SealBuilderOverrides.PriceOverride priceOverride : overrides.genderPriceOverrides) {
+                    if (priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        return priceOverride.currency;
+                    }
                 }
                 break;
             case NATURE:
-                EnumNature nature = EnumNature.natureFromString(value);
-                if (OverridesConfig.naturePriceOverrides.containsKey(specie)) {
-                    List<OverrideNature> natureOverrides = OverridesConfig.naturePriceOverrides.get(specie);
-                    for (OverrideNature override : natureOverrides) {
-                        if (override.nature == nature) return override.currency;
+                for(SealBuilderOverrides.ValuePriceOverride priceOverride : overrides.naturePriceOverrides) {
+                    if (priceOverride.pokemon == null || priceOverride.pokemon.isEmpty() || priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        if(priceOverride.value == null || priceOverride.value.isEmpty() || priceOverride.value.equalsIgnoreCase(value)) return priceOverride.currency;
                     }
-                }
-                if (OverridesConfig.naturePriceOverridesGlobal.containsKey(nature)) {
-                    return OverridesConfig.naturePriceOverridesGlobal.get(nature).getKey();
                 }
                 break;
             case POKEBALL:
-                EnumPokeballs pokeball = EnumPokeballs.getPokeballFromString(value);
-                if (OverridesConfig.pokeballPriceOverrides.containsKey(specie)) {
-                    List<OverridePokeball> pokeballOverrides = OverridesConfig.pokeballPriceOverrides.get(specie);
-                    for (OverridePokeball override : pokeballOverrides) {
-                        if (override.pokeball == pokeball) return override.currency;
+                for(SealBuilderOverrides.ValuePriceOverride priceOverride : overrides.pokeballPriceOverrides) {
+                    if (priceOverride.pokemon == null || priceOverride.pokemon.isEmpty() || priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        if(priceOverride.value == null || priceOverride.value.isEmpty() || priceOverride.value.equalsIgnoreCase(value)) return priceOverride.currency;
                     }
-                }
-                if (OverridesConfig.pokeballPriceOverridesGlobal.containsKey(pokeball)) {
-                    return OverridesConfig.pokeballPriceOverridesGlobal.get(pokeball).getKey();
                 }
                 break;
             case GROWTH:
-                EnumGrowth growth = EnumGrowth.growthFromString(value);
-                if (OverridesConfig.growthPriceOverrides.containsKey(specie)) {
-                    List<OverrideGrowth> growthOverrides = OverridesConfig.growthPriceOverrides.get(specie);
-                    for (OverrideGrowth override : growthOverrides) {
-                        if (override.growth == growth) return override.currency;
+                for(SealBuilderOverrides.ValuePriceOverride priceOverride : overrides.growthPriceOverrides) {
+                    if (priceOverride.pokemon == null || priceOverride.pokemon.isEmpty() || priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        if(priceOverride.value == null || priceOverride.value.isEmpty() || priceOverride.value.equalsIgnoreCase(value)) return priceOverride.currency;
                     }
-                }
-                if (OverridesConfig.growthPriceOverridesGlobal.containsKey(growth)) {
-                    return OverridesConfig.growthPriceOverridesGlobal.get(growth).getKey();
                 }
                 break;
             case IVS:
-                StatsType stats = (StatsType) Arrays.stream(StatsType.values()).filter(type -> type.toString().equalsIgnoreCase(value)).toArray()[0];
-                if (OverridesConfig.ivsPriceOverrides.containsKey(specie)) {
-                    List<OverrideStats> statsOverrides = OverridesConfig.ivsPriceOverrides.get(specie);
-                    for (OverrideStats override : statsOverrides) {
-                        if (override.statsType == stats) return override.currency;
+                for(SealBuilderOverrides.ValuePriceOverride priceOverride : overrides.ivsPriceOverrides) {
+                    if (priceOverride.pokemon == null || priceOverride.pokemon.isEmpty() || priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        if(priceOverride.value == null || priceOverride.value.isEmpty() || priceOverride.value.equalsIgnoreCase(value)) return priceOverride.currency;
                     }
-                }
-                if (OverridesConfig.ivsPriceOverridesGlobal.containsKey(stats)) {
-                    return OverridesConfig.ivsPriceOverridesGlobal.get(stats).getKey();
                 }
         }
 
@@ -93,71 +78,59 @@ public class ConfigUtils {
     public static Double getPriceOverrides(EnumSpecies specie, ModuleTypes types, String value) {
         switch(types) {
             case CREATE:
-                if(OverridesConfig.createPriceOverrides.containsKey(specie)) {
-                    return OverridesConfig.createPriceOverrides.get(specie).getValue();
+                for(SealBuilderOverrides.PriceOverride priceOverride : overrides.createPriceOverrides) {
+                    if (priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        return priceOverride.price;
+                    }
                 }
                 break;
             case SHINY:
-                if(OverridesConfig.shinyPriceOverrides.containsKey(specie)) {
-                    return OverridesConfig.shinyPriceOverrides.get(specie).getValue();
+                for(SealBuilderOverrides.PriceOverride priceOverride : overrides.shinyPriceOverrides) {
+                    if (priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        return priceOverride.price;
+                    }
                 }
                 break;
             case HIDDEN_ABILITY:
-                if(OverridesConfig.hiddenAbilityPriceOverrides.containsKey(specie)) {
-                    return OverridesConfig.hiddenAbilityPriceOverrides.get(specie).getValue();
+                for(SealBuilderOverrides.PriceOverride priceOverride : overrides.hiddenAbilityPriceOverrides) {
+                    if (priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        return priceOverride.price;
+                    }
                 }
                 break;
             case GENDER:
-                if(OverridesConfig.genderPriceOverrides.containsKey(specie)) {
-                    return OverridesConfig.genderPriceOverrides.get(specie).getValue();
+                for(SealBuilderOverrides.PriceOverride priceOverride : overrides.genderPriceOverrides) {
+                    if (priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        return priceOverride.price;
+                    }
                 }
                 break;
             case NATURE:
-                EnumNature nature = EnumNature.natureFromString(value);
-                if(OverridesConfig.naturePriceOverrides.containsKey(specie)) {
-                    List<OverrideNature> natureOverrides = OverridesConfig.naturePriceOverrides.get(specie);
-                    for(OverrideNature override : natureOverrides) {
-                        if(override.nature == nature) return override.value;
+                for(SealBuilderOverrides.ValuePriceOverride priceOverride : overrides.naturePriceOverrides) {
+                    if (priceOverride.pokemon == null || priceOverride.pokemon.isEmpty() || priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        if(priceOverride.value == null || priceOverride.value.isEmpty() || priceOverride.value.equalsIgnoreCase(value)) return priceOverride.price;
                     }
-                }
-                if(OverridesConfig.naturePriceOverridesGlobal.containsKey(nature)) {
-                    return OverridesConfig.naturePriceOverridesGlobal.get(nature).getValue();
                 }
                 break;
             case POKEBALL:
-                EnumPokeballs pokeball = EnumPokeballs.getPokeballFromString(value);
-                if (OverridesConfig.pokeballPriceOverrides.containsKey(specie)) {
-                    List<OverridePokeball> pokeballOverrides = OverridesConfig.pokeballPriceOverrides.get(specie);
-                    for (OverridePokeball override : pokeballOverrides) {
-                        if (override.pokeball == pokeball) return override.value;
+                for(SealBuilderOverrides.ValuePriceOverride priceOverride : overrides.pokeballPriceOverrides) {
+                    if (priceOverride.pokemon == null || priceOverride.pokemon.isEmpty() || priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        if(priceOverride.value == null || priceOverride.value.isEmpty() || priceOverride.value.equalsIgnoreCase(value)) return priceOverride.price;
                     }
-                }
-                if (OverridesConfig.pokeballPriceOverridesGlobal.containsKey(pokeball)) {
-                    return OverridesConfig.pokeballPriceOverridesGlobal.get(pokeball).getValue();
                 }
                 break;
             case GROWTH:
-                EnumGrowth growth = EnumGrowth.growthFromString(value);
-                if (OverridesConfig.growthPriceOverrides.containsKey(specie)) {
-                    List<OverrideGrowth> growthOverrides = OverridesConfig.growthPriceOverrides.get(specie);
-                    for (OverrideGrowth override : growthOverrides) {
-                        if (override.growth == growth) return override.value;
+                for(SealBuilderOverrides.ValuePriceOverride priceOverride : overrides.growthPriceOverrides) {
+                    if (priceOverride.pokemon == null || priceOverride.pokemon.isEmpty() || priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        if(priceOverride.value == null || priceOverride.value.isEmpty() || priceOverride.value.equalsIgnoreCase(value)) return priceOverride.price;
                     }
-                }
-                if (OverridesConfig.growthPriceOverridesGlobal.containsKey(growth)) {
-                    return OverridesConfig.growthPriceOverridesGlobal.get(growth).getValue();
                 }
                 break;
             case IVS:
-                StatsType stats = (StatsType) Arrays.stream(StatsType.values()).filter(type -> type.toString().equalsIgnoreCase(value)).toArray()[0];
-                if (OverridesConfig.ivsPriceOverrides.containsKey(specie)) {
-                    List<OverrideStats> statsOverrides = OverridesConfig.ivsPriceOverrides.get(specie);
-                    for (OverrideStats override : statsOverrides) {
-                        if (override.statsType == stats) return override.value;
+                for(SealBuilderOverrides.ValuePriceOverride priceOverride : overrides.ivsPriceOverrides) {
+                    if (priceOverride.pokemon == null || priceOverride.pokemon.isEmpty() || priceOverride.pokemon.equalsIgnoreCase(specie.name)) {
+                        if(priceOverride.value == null || priceOverride.value.isEmpty() || priceOverride.value.equalsIgnoreCase(value)) return priceOverride.price;
                     }
-                }
-                if (OverridesConfig.ivsPriceOverridesGlobal.containsKey(stats)) {
-                    return OverridesConfig.ivsPriceOverridesGlobal.get(stats).getValue();
                 }
         }
 
@@ -165,15 +138,17 @@ public class ConfigUtils {
     }
 
     public static boolean isModifierDisabled(ModuleTypes type) {
-        for(String modifier : OverridesConfig.modifierBlacklist) {
-            if(type.getKey().equalsIgnoreCase(modifier)) return true;
+        if(overrides.blacklist.containsKey("all")) {
+            for(String modifier : overrides.blacklist.get("all")) {
+                if(type.getKey().equalsIgnoreCase(modifier)) return true;
+            }
         }
         return false;
     }
 
     public static boolean isBlacklisted(EnumSpecies specie, ModuleTypes type) {
-        if(OverridesConfig.blacklist.containsKey(specie)) {
-            for (String s : OverridesConfig.blacklist.get(specie)) {
+        if(overrides.blacklist.containsKey(specie.name)) {
+            for (String s : overrides.blacklist.get(specie.name)) {
                 if (s.equalsIgnoreCase(type.getKey())) return true;
             }
         }

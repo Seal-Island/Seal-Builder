@@ -10,9 +10,6 @@ dependencies {
     compile project(':sealbuilder-common')
     compileOnly 'org.spongepowered:spongeapi:7.3.0'
     annotationProcessor 'org.spongepowered:spongeapi:7.3.0'
-
-    //Seal Library Sponge
-    compileOnly files(project.rootDir.toString() + "/../Plugins/Seal Library/seallibrary-sponge/build/libs/seallibrary-sponge.jar")
 }
 
 sponge.plugin.id = 'sealbuilder'

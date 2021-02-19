@@ -14,9 +14,6 @@ dependencies {
     compile project(':sealbuilder-common')
     compileOnly 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
     compileOnly group: 'com.github.azbh111', name: 'craftbukkit-1.12.2', version: 'R'
-
-    //Seal Library Bukkit
-    compileOnly files(project.rootDir.toString() + "/../Plugins/Seal Library/seallibrary-bukkit/build/libs/seallibrary-bukkit.jar")
 }
 
 processResources {
