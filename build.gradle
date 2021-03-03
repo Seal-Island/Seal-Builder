@@ -38,7 +38,7 @@ allprojects {
         minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 
         //Seal Library Common
-        compileOnly 'com.focamacho:seallibrary:1.0:common'
+        compileOnly 'com.focamacho:seallibrary:1.2:common'
 
         //Pixelmon
         compileOnly files(project.rootDir.toString() + "/libs/Pixelmon-1.12.2-8.1.2-universal.jar")

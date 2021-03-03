@@ -1,6 +1,5 @@
 package com.focamacho.sealbuilder.inventory;
 
-import com.focamacho.sealbuilder.SealBuilder;
 import com.focamacho.sealbuilder.config.SealBuilderLang;
 import com.focamacho.sealbuilder.config.lib.ModuleTypes;
 import com.focamacho.sealbuilder.util.ConfigUtils;
@@ -26,7 +25,7 @@ public class PokemonHiddenAbilityInventory {
     private static final AbstractMenu base;
 
     static {
-        AbstractMenu builder = Menu.create(SealBuilder.instance)
+        AbstractMenu builder = Menu.create()
                 .setRows(3)
                 .setTitle(SealBuilderLang.getLang("menu.hiddenability.title"));
 

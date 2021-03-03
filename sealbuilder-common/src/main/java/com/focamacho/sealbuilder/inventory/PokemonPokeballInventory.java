@@ -1,6 +1,5 @@
 package com.focamacho.sealbuilder.inventory;
 
-import com.focamacho.sealbuilder.SealBuilder;
 import com.focamacho.sealbuilder.config.SealBuilderLang;
 import com.focamacho.sealbuilder.config.lib.ModuleTypes;
 import com.focamacho.sealbuilder.util.ConfigUtils;
@@ -29,7 +28,7 @@ public class PokemonPokeballInventory {
     private static final int[] pokeballSlots = new int[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
 
     static {
-        AbstractMenu builder = Menu.create(SealBuilder.instance)
+        AbstractMenu builder = Menu.create()
                 .setRows(6)
                 .setTitle(SealBuilderLang.getLang("menu.pokeball.title"));
 
