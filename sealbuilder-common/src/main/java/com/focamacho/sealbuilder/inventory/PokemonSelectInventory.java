@@ -8,7 +8,6 @@ import com.focamacho.seallibrary.forge.ForgeUtils;
 import com.focamacho.seallibrary.item.ISealStack;
 import com.focamacho.seallibrary.item.SealStack;
 import com.focamacho.seallibrary.item.lib.ItemFlag;
-import com.focamacho.seallibrary.menu.AbstractMenu;
 import com.focamacho.seallibrary.menu.Menu;
 import com.focamacho.seallibrary.menu.item.ClickableItem;
 import com.focamacho.seallibrary.player.ISealPlayer;
@@ -17,17 +16,18 @@ import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import com.pixelmonmod.pixelmon.items.ItemPixelmonSprite;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
+import lombok.SneakyThrows;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class PokemonSelectInventory {
 
-    private static final AbstractMenu base;
+    private static final Menu base;
     private static final int[] basePokemonSlots = new int[]{12, 13, 14, 21, 22, 23};
 
     static {
-        AbstractMenu builder = Menu.create()
+        Menu builder = Menu.create()
                 .setRows(4)
                 .setTitle(SealBuilderLang.getLang("menu.main.title"));
 
@@ -47,12 +47,13 @@ public class PokemonSelectInventory {
         base = builder;
     }
 
-    public static AbstractMenu get(ISealPlayer player, ISealPlayer target) {
+    @SneakyThrows
+    public static Menu get(ISealPlayer player, ISealPlayer target) {
         PlayerPartyStorage party = Pixelmon.storageManager.getParty(target.getUUID());
 
-        AbstractMenu menu = base.copy();
+        Menu menu = base.copy();
 
-        boolean canCreatePokemon = target.hasPermission("sealbuilder.create");
+        boolean canCreatePokemon = target.hasPermission("sealbuilder.create").get();
         ISealStack noPokemonItem = SealStack.get("pixelmon:master_ball").setName(TextUtils.getFormattedText(canCreatePokemon ? SealBuilderLang.getLang("menu.main.create") : SealBuilderLang.getLang("menu.main.nopokemon"), target)).setFlag(ItemFlag.HIDE_ATTRIBUTES, true).setFlag(ItemFlag.HIDE_POTION_EFFECTS, true);
 
         for(int i = 0; i < basePokemonSlots.length; i++) {

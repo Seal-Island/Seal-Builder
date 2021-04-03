@@ -10,6 +10,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "io.freefair.lombok" version "5.3.0"
+}
+
 group = 'com.focamacho'
 version = '1.1'
 
@@ -17,6 +21,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'net.minecraftforge.gradle'
+    apply plugin: 'io.freefair.lombok'
 
     group = project.group
     version = project.version
@@ -38,7 +43,7 @@ allprojects {
         minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 
         //Seal Library Common
-        compileOnly 'com.focamacho:seallibrary:1.2:common'
+        compileOnly 'com.focamacho:seallibrary:1.3:common'
 
         //Pixelmon
         compileOnly files(project.rootDir.toString() + "/libs/Pixelmon-1.12.2-8.1.2-universal.jar")

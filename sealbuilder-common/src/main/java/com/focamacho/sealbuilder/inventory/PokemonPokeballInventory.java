@@ -8,7 +8,6 @@ import com.focamacho.seallibrary.forge.ForgeUtils;
 import com.focamacho.seallibrary.item.ISealStack;
 import com.focamacho.seallibrary.item.SealStack;
 import com.focamacho.seallibrary.item.lib.ItemFlag;
-import com.focamacho.seallibrary.menu.AbstractMenu;
 import com.focamacho.seallibrary.menu.Menu;
 import com.focamacho.seallibrary.menu.item.ClickableItem;
 import com.focamacho.seallibrary.player.ISealPlayer;
@@ -24,11 +23,11 @@ import static com.focamacho.sealbuilder.SealBuilder.config;
 
 public class PokemonPokeballInventory {
 
-    private static final AbstractMenu base;
+    private static final Menu base;
     private static final int[] pokeballSlots = new int[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
 
     static {
-        AbstractMenu builder = Menu.create()
+        Menu builder = Menu.create()
                 .setRows(6)
                 .setTitle(SealBuilderLang.getLang("menu.pokeball.title"));
 
@@ -48,8 +47,8 @@ public class PokemonPokeballInventory {
         base = builder;
     }
 
-    public static AbstractMenu get(Pokemon pokemon, ISealPlayer player) {
-        AbstractMenu menu = base.copy();
+    public static Menu get(Pokemon pokemon, ISealPlayer player) {
+        Menu menu = base.copy();
 
         //Retornar ao Menu de Edição
         ISealStack pokemonItem = ForgeUtils.getServerStack(ItemPixelmonSprite.getPhoto(pokemon)).setName(TextUtils.getFormattedText(SealBuilderLang.getLang("menu.main.pokemon.name"), pokemon, player)).setLore(TextUtils.getFormattedLore(SealBuilderLang.getLang("menu.main.pokemon.lore"), pokemon, player));

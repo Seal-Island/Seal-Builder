@@ -7,7 +7,6 @@ import com.focamacho.sealbuilder.util.TextUtils;
 import com.focamacho.seallibrary.forge.ForgeUtils;
 import com.focamacho.seallibrary.item.ISealStack;
 import com.focamacho.seallibrary.item.SealStack;
-import com.focamacho.seallibrary.menu.AbstractMenu;
 import com.focamacho.seallibrary.menu.Menu;
 import com.focamacho.seallibrary.menu.item.ClickableItem;
 import com.focamacho.seallibrary.player.ISealPlayer;
@@ -23,10 +22,10 @@ import static com.focamacho.sealbuilder.SealBuilder.config;
 
 public class PokemonGenderInventory {
 
-    private static final AbstractMenu base;
+    private static final Menu base;
 
     static {
-        AbstractMenu builder = Menu.create()
+        Menu builder = Menu.create()
                 .setRows(3)
                 .setTitle(SealBuilderLang.getLang("menu.gender.title"));
 
@@ -47,8 +46,8 @@ public class PokemonGenderInventory {
         base = builder;
     }
 
-    public static AbstractMenu get(Pokemon pokemon, ISealPlayer player) {
-        AbstractMenu menu = base.copy();
+    public static Menu get(Pokemon pokemon, ISealPlayer player) {
+        Menu menu = base.copy();
 
         String currency = getGenderCurrency(pokemon);
         double price = getGenderPrice(pokemon);

@@ -8,7 +8,6 @@ import com.focamacho.seallibrary.forge.ForgeUtils;
 import com.focamacho.seallibrary.item.ISealStack;
 import com.focamacho.seallibrary.item.SealStack;
 import com.focamacho.seallibrary.item.lib.ItemFlag;
-import com.focamacho.seallibrary.menu.AbstractMenu;
 import com.focamacho.seallibrary.menu.Menu;
 import com.focamacho.seallibrary.menu.item.ClickableItem;
 import com.focamacho.seallibrary.player.ISealPlayer;
@@ -21,10 +20,10 @@ import java.util.List;
 
 public class PokemonEditInventory {
 
-    private static final AbstractMenu base;
+    private static final Menu base;
 
     static {
-        AbstractMenu builder = Menu.create()
+        Menu builder = Menu.create()
                 .setRows(5)
                 .setTitle(SealBuilderLang.getLang("menu.edit.title"));
 
@@ -44,8 +43,8 @@ public class PokemonEditInventory {
         base = builder;
     }
 
-    public static AbstractMenu get(Pokemon pokemon, ISealPlayer target) {
-        AbstractMenu menu = base.copy();
+    public static Menu get(Pokemon pokemon, ISealPlayer target) {
+        Menu menu = base.copy();
 
         //Retornar ao Menu de Seleção
         ISealStack pokemonItem = ForgeUtils.getServerStack(ItemPixelmonSprite.getPhoto(pokemon)).setName(TextUtils.getFormattedText(SealBuilderLang.getLang("menu.main.pokemon.name"), pokemon, target)).setLore(TextUtils.getFormattedLore(SealBuilderLang.getLang("menu.main.pokemon.lore"), pokemon, target));

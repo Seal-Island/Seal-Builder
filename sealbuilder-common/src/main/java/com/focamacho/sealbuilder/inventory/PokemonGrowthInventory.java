@@ -8,7 +8,6 @@ import com.focamacho.seallibrary.forge.ForgeUtils;
 import com.focamacho.seallibrary.item.ISealStack;
 import com.focamacho.seallibrary.item.SealStack;
 import com.focamacho.seallibrary.item.lib.ItemFlag;
-import com.focamacho.seallibrary.menu.AbstractMenu;
 import com.focamacho.seallibrary.menu.Menu;
 import com.focamacho.seallibrary.menu.item.ClickableItem;
 import com.focamacho.seallibrary.menu.lib.AbstractClick;
@@ -25,10 +24,10 @@ import static com.focamacho.sealbuilder.SealBuilder.config;
 
 public class PokemonGrowthInventory {
 
-    private static final AbstractMenu base;
+    private static final Menu base;
 
     static {
-        AbstractMenu builder = Menu.create()
+        Menu builder = Menu.create()
                 .setRows(5)
                 .setTitle(SealBuilderLang.getLang("menu.growth.title"));
 
@@ -48,8 +47,8 @@ public class PokemonGrowthInventory {
         base = builder;
     }
 
-    public static AbstractMenu get(Pokemon pokemon, ISealPlayer player) {
-        AbstractMenu menu = base.copy();
+    public static Menu get(Pokemon pokemon, ISealPlayer player) {
+        Menu menu = base.copy();
 
         //Retornar ao Menu de Edição
         ISealStack pokemonItem = ForgeUtils.getServerStack(ItemPixelmonSprite.getPhoto(pokemon)).setName(TextUtils.getFormattedText(SealBuilderLang.getLang("menu.main.pokemon.name"), pokemon, player)).setLore(TextUtils.getFormattedLore(SealBuilderLang.getLang("menu.main.pokemon.lore"), pokemon, player));
@@ -126,7 +125,7 @@ public class PokemonGrowthInventory {
         return menu;
     }
 
-    private static void addGrowthToMenu(AbstractMenu menu, EnumGrowth growth, Pokemon pokemon, String currency, double price, int slot, ISealStack stack) {
+    private static void addGrowthToMenu(Menu menu, EnumGrowth growth, Pokemon pokemon, String currency, double price, int slot, ISealStack stack) {
         menu.addItem(ClickableItem.create(slot, stack).setOnPrimary(click -> growthClickAction(click, growth, pokemon, currency, price)));
     }
 

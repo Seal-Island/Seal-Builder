@@ -8,7 +8,6 @@ import com.focamacho.seallibrary.forge.ForgeUtils;
 import com.focamacho.seallibrary.item.ISealStack;
 import com.focamacho.seallibrary.item.SealStack;
 import com.focamacho.seallibrary.item.lib.ItemFlag;
-import com.focamacho.seallibrary.menu.AbstractMenu;
 import com.focamacho.seallibrary.menu.Menu;
 import com.focamacho.seallibrary.menu.item.ClickableItem;
 import com.focamacho.seallibrary.player.ISealPlayer;
@@ -26,14 +25,14 @@ import static com.focamacho.sealbuilder.SealBuilder.config;
 
 public class PokemonIVsInventory {
 
-    private static final AbstractMenu base;
+    private static final Menu base;
     private static final int[] slots = {5, 14, 23, 32, 41, 50};
     private static final StatsType[] types = {StatsType.HP, StatsType.Attack, StatsType.Defence, StatsType.SpecialAttack, StatsType.SpecialDefence, StatsType.Speed};
     public static final ISealStack[] icons = {SealStack.get("pixelmon:fairy_gem"), SealStack.get("pixelmon:psychic_gem"), SealStack.get("pixelmon:water_gem"), SealStack.get("pixelmon:fire_gem"), SealStack.get("pixelmon:grass_gem"), SealStack.get("pixelmon:ice_gem")};
     public static final Random rand = new Random();
 
     static {
-        AbstractMenu builder = Menu.create()
+        Menu builder = Menu.create()
                 .setRows(6)
                 .setTitle(SealBuilderLang.getLang("menu.ivs.title"));
 
@@ -53,8 +52,8 @@ public class PokemonIVsInventory {
         base = builder;
     }
 
-    public static AbstractMenu get(Pokemon pokemon, ISealPlayer player) {
-        AbstractMenu menu = base.copy();
+    public static Menu get(Pokemon pokemon, ISealPlayer player) {
+        Menu menu = base.copy();
 
         //Retornar ao Menu de Edição
         ISealStack pokemonItem = ForgeUtils.getServerStack(ItemPixelmonSprite.getPhoto(pokemon)).setName(TextUtils.getFormattedText(SealBuilderLang.getLang("menu.main.pokemon.name"), pokemon, player)).setLore(TextUtils.getFormattedLore(SealBuilderLang.getLang("menu.main.pokemon.lore"), pokemon, player));
@@ -168,7 +167,7 @@ public class PokemonIVsInventory {
         }
     }
 
-    private static void update(ISealPlayer player, AbstractMenu menu, Pokemon pokemon) {
+    private static void update(ISealPlayer player, Menu menu, Pokemon pokemon) {
         int[] ivs = pokemon.getIVs().getArray();
 
         for(int i = 0; i < 6; i++) {
