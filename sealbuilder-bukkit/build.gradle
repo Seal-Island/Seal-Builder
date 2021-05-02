@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     compile project(':sealbuilder-common')
-    compileOnly 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
+    compileOnly 'org.bukkit:bukkit:1.15.2-R0.1-SNAPSHOT'
     compileOnly group: 'com.github.azbh111', name: 'craftbukkit-1.12.2', version: 'R'
 }
 
