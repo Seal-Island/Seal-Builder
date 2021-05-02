@@ -40,7 +40,7 @@ allprojects {
 
     dependencies {
         //Forge
-        minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+        minecraft 'net.minecraftforge:forge:1.16.5-36.1.16'
 
         //Seal Library Common
         compileOnly 'com.focamacho:seallibrary:1.3:common'
