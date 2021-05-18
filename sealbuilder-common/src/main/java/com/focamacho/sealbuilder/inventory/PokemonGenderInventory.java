@@ -62,7 +62,7 @@ public class PokemonGenderInventory {
         Pokemon fakeGenderPokemon = Pixelmon.pokemonFactory.create(pokemon.getSpecies());
         fakeGenderPokemon.setGender(pokemon.getGender() == Gender.Female ? Gender.Male : Gender.Female);
 
-        ISealStack pokemonItem = ForgeUtils.getServerStack(ItemPixelmonSprite.getPhoto(pokemon)).setName(TextUtils.getFormattedText(pokemonItemName, pokemon, player)).setLore(TextUtils.getFormattedLore(pokemonItemLore, pokemon, player));
+        ISealStack pokemonItem = ForgeUtils.getServerStack(ItemPixelmonSprite.getPhoto(pokemon)).setName(TextUtils.getFormattedText(pokemonItemName, fakeGenderPokemon, player)).setLore(TextUtils.getFormattedLore(pokemonItemLore, fakeGenderPokemon, player));
         ISealStack cancelItem = SealStack.get("pixelmon:red_apricorn").setName(TextUtils.getFormattedText(cancelItemName, pokemon, player)).setLore(TextUtils.getFormattedLore(cancelItemLore, pokemon, player));
         ISealStack confirmItem = SealStack.get("pixelmon:green_apricorn").setName(TextUtils.getFormattedText(confirmItemName, pokemon, player)).setLore(TextUtils.getFormattedLore(confirmItemLore, pokemon, player));
 

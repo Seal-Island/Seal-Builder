@@ -87,7 +87,7 @@ public class PokemonEditInventory {
         }));
 
         //Liberar Habilidade Oculta
-        boolean hasHiddenAbility = pokemon.getBaseStats().abilities.length == 3 && pokemon.getBaseStats().abilities[2] != null && !pokemon.getBaseStats().abilities[0].equals(pokemon.getBaseStats().abilities[2]);
+        boolean hasHiddenAbility = pokemon.getBaseStats().getAbilitiesArray().length == 3 && pokemon.getBaseStats().getAbilitiesArray() != null && !pokemon.getBaseStats().getAbilitiesArray()[0].equals(pokemon.getBaseStats().getAbilitiesArray()[2]);
         boolean isHiddenAbility = !(pokemon.getAbilitySlot() < 2 && hasHiddenAbility);
         ISealStack hiddenAbility = SealStack.get("pixelmon:lure_ha_weak").setGlowing(isHiddenAbility).setName(TextUtils.getFormattedText(SealBuilderLang.getLang("menu.edit.hiddenability.name"), pokemon, target)).setLore(TextUtils.getFormattedLore(hasHiddenAbility ? isHiddenAbility ? SealBuilderLang.getLang("menu.edit.hiddenability.your") : SealBuilderLang.getLang("menu.edit.hiddenability.lore") : SealBuilderLang.getLang("menu.edit.hiddenability.none"), pokemon, target)).setFlag(ItemFlag.HIDE_ATTRIBUTES, true).setFlag(ItemFlag.HIDE_POTION_EFFECTS, true).setFlag(ItemFlag.HIDE_ENCHANTS, true);
         menu.addItem(ClickableItem.create(25, hiddenAbility).setOnPrimary(click ->  {
@@ -106,7 +106,7 @@ public class PokemonEditInventory {
         }));
 
         //Alternar Gênero do Pokémon
-        boolean hasOtherGender = Math.abs(pokemon.getBaseStats().malePercent - 50) < 50;
+        boolean hasOtherGender = Math.abs(pokemon.getBaseStats().getMalePercent() - 50) < 50;
         ISealStack gender = SealStack.get(pokemon.getGender() == Gender.None ? "pixelmon:mint:4" : pokemon.getGender() == Gender.Female ? "pixelmon:mint:24" : "pixelmon:mint:12").setName(TextUtils.getFormattedText(SealBuilderLang.getLang("menu.edit.gender.name"), pokemon, target)).setLore(TextUtils.getFormattedLore(hasOtherGender ? SealBuilderLang.getLang("menu.edit.gender.lore") : SealBuilderLang.getLang("menu.edit.gender.nogender"), pokemon, target)).setFlag(ItemFlag.HIDE_ATTRIBUTES, true).setFlag(ItemFlag.HIDE_POTION_EFFECTS, true).setFlag(ItemFlag.HIDE_ENCHANTS, true);
         menu.addItem(ClickableItem.create(34, gender).setOnPrimary(click ->  {
             if(!hasOtherGender) return;

@@ -15,7 +15,7 @@ plugins {
 }
 
 group = 'com.focamacho'
-version = '1.1.1'
+version = '1.1.2'
 
 allprojects {
     apply plugin: 'java'
@@ -46,7 +46,7 @@ allprojects {
         compileOnly 'com.focamacho:seallibrary:1.3:common'
 
         //Pixelmon
-        compileOnly files(project.rootDir.toString() + "/libs/Pixelmon-1.12.2-8.1.2-universal.jar")
+        compileOnly files(project.rootDir.toString() + "/libs/Pixelmon-1.12.2-8.2.0-universal.jar")
     }
 
     tasks.withType(JavaCompile) {

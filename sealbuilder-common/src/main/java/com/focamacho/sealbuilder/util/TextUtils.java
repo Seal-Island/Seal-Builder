@@ -5,10 +5,7 @@ import com.focamacho.seallibrary.economy.EconomyHandler;
 import com.focamacho.seallibrary.player.ISealPlayer;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.battles.attacks.specialAttacks.basic.HiddenPower;
-import com.pixelmonmod.pixelmon.entities.pixelmon.stats.EVStore;
-import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
-import com.pixelmonmod.pixelmon.entities.pixelmon.stats.Moveset;
-import com.pixelmonmod.pixelmon.entities.pixelmon.stats.Stats;
+import com.pixelmonmod.pixelmon.entities.pixelmon.stats.*;
 import com.pixelmonmod.pixelmon.enums.EnumNature;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 
@@ -62,19 +59,19 @@ public class TextUtils {
                 .replace("%pokemonhappiness%", "" + pokemon.getFriendship())
                 .replace("%pokemonhiddenpower%", HiddenPower.getHiddenPowerType(pokemon.getIVs()).getLocalizedName())
                 .replace("%pokemonivsum%", "" + ivSum)
-                .replace("%pokemonivhp%", ivStore != null ? "" + ivStore.hp : "0")
-                .replace("%pokemonivatk%", ivStore != null ? "" + ivStore.attack : "0")
-                .replace("%pokemonivdef%", ivStore != null ? "" + ivStore.defence : "0")
-                .replace("%pokemonivspa%", ivStore != null ? "" + ivStore.specialAttack : "0")
-                .replace("%pokemonivspd%", ivStore != null ? "" + ivStore.specialDefence : "0")
-                .replace("%pokemonivspe%", ivStore != null ? "" + ivStore.speed : "0")
+                .replace("%pokemonivhp%", ivStore != null ? "" + ivStore.getStat(StatsType.HP) : "0")
+                .replace("%pokemonivatk%", ivStore != null ? "" + ivStore.getStat(StatsType.Attack) : "0")
+                .replace("%pokemonivdef%", ivStore != null ? "" + ivStore.getStat(StatsType.Defence) : "0")
+                .replace("%pokemonivspa%", ivStore != null ? "" + ivStore.getStat(StatsType.SpecialAttack) : "0")
+                .replace("%pokemonivspd%", ivStore != null ? "" + ivStore.getStat(StatsType.SpecialDefence) : "0")
+                .replace("%pokemonivspe%", ivStore != null ? "" + ivStore.getStat(StatsType.Speed) : "0")
                 .replace("%pokemonevsum%", "" + evSum)
-                .replace("%pokemonevhp%", evStore != null ? "" + evStore.hp : "0")
-                .replace("%pokemonevatk%", evStore != null ? "" + evStore.attack : "0")
-                .replace("%pokemonevdef%", evStore != null ? "" + evStore.defence : "0")
-                .replace("%pokemonevspa%", evStore != null ? "" + evStore.specialAttack : "0")
-                .replace("%pokemonevspd%", evStore != null ? "" + evStore.specialDefence : "0")
-                .replace("%pokemonevspe%", evStore != null ? "" + evStore.speed : "0")
+                .replace("%pokemonevhp%", evStore != null ? "" + evStore.getStat(StatsType.HP) : "0")
+                .replace("%pokemonevatk%", evStore != null ? "" + evStore.getStat(StatsType.Attack) : "0")
+                .replace("%pokemonevdef%", evStore != null ? "" + evStore.getStat(StatsType.Defence) : "0")
+                .replace("%pokemonevspa%", evStore != null ? "" + evStore.getStat(StatsType.SpecialAttack) : "0")
+                .replace("%pokemonevspd%", evStore != null ? "" + evStore.getStat(StatsType.SpecialDefence) : "0")
+                .replace("%pokemonevspe%", evStore != null ? "" + evStore.getStat(StatsType.Speed) : "0")
                 .replace("%pokemonmoveone%", moveset.get(0) == null ? SealBuilderLang.getLang("none") : moveset.get(0).getActualMove().getLocalizedName())
                 .replace("%pokemonmovetwo%", moveset.get(1) == null ? SealBuilderLang.getLang("none") : moveset.get(1).getActualMove().getLocalizedName())
                 .replace("%pokemonmovethree%", moveset.get(2) == null ? SealBuilderLang.getLang("none") : moveset.get(2).getActualMove().getLocalizedName())
